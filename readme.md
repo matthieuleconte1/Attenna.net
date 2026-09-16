@@ -1,35 +1,75 @@
-# SAÉ 14 — Site vitrine (Attenna Cloud & Hosting)
+# Attenna.net
 
-Site web statique réalisé dans le pour la SAÉ 1.04 du BUT Réseaux & Télécommunications de L'IUT de Ifs.
+Site vitrine et portail d’accès aux services privés d’Attenna. Le projet a été
+créé dans le cadre de la SAÉ 1.04 du BUT Réseaux & Télécommunications de l’IUT
+Grand Ouest Normandie, site d’Ifs.
 
-Le thème présente un service d’hébergement/virtualisation basé sur **Proxmox (PVE)** et un cloud privé basé sur **Nextcloud**.
+Le site présente une infrastructure d’auto-hébergement articulée autour de
+Proxmox VE et de Nextcloud, avec des accès directs aux différents services et
+un suivi de leur disponibilité depuis le navigateur.
 
-## Hébergement
+Site en production : [attenna.net](https://attenna.net)
 
-- Site (GitHub Pages) : https://matthieuleconte1.github.io/SAE14-Site/
+## Fonctionnalités
 
-- Site (Poweredge R730) : https://attenna.net
-## Pages
+- accès rapide à Proxmox VE, Nextcloud et Home Assistant ;
+- panneau de disponibilité des services Attenna ;
+- page de présentation de l’infrastructure ;
+- guide de connexion WireGuard ;
+- profil de l’auteur ;
+- interface responsive avec animations et transitions ;
+- arrière-plan océanique animé avec WebGPU et solution de repli Canvas 2D.
 
-- Accueil : `index.html`
-- À propos : `HTML/A-Propos.html`
-- Profil : `HTML/Matthieu.html`
+## Technologies
 
-## Liens externes (dans le site)
+- HTML, CSS et JavaScript ;
+- TypeScript ;
+- Vite 8 ;
+- vGPU et shaders WGSL pour le rendu WebGPU.
 
-- Proxmox (PVE) : https://pve.attenna.net
-- Nextcloud : https://cloud.attenna.net
+## Installation
+
+Prérequis : une version récente de Node.js et npm.
+
+```bash
+git clone https://github.com/matthieuleconte1/Attenna.net.git
+cd Attenna.net
+npm install
+npm run dev
+```
+
+Le serveur de développement indique l’adresse locale à ouvrir dans le
+navigateur.
+
+## Commandes disponibles
+
+```bash
+npm run dev      # lance le serveur de développement
+npm run build    # vérifie TypeScript et génère la version de production
+npm run preview  # prévisualise localement la version de production
+```
+
+Les fichiers générés par `npm run build` sont placés dans `dist/`.
 
 ## Structure du projet
 
-- `index.html` : page d’accueil
-- `HTML/` : pages secondaires (à propos, profil)
-- `CSS/` : feuilles de style par page
-- `JS/` : scripts (effets/interaction)
-- `pictures/` : images, logos et icônes
+```text
+CSS/         Feuilles de style du site
+HTML/        Pages À propos et profil
+JS/          Interactions, suivi des services et intégration de l’océan
+fft-ocean/   Moteur WebGPU, graphe de rendu et shaders WGSL
+pictures/    Images, logos et icônes
+scripts/     Scripts de génération des ressources
+index.html   Page d’accueil
+wg.html      Guide WireGuard
+horloge.html Horloge au style terminal
+```
 
-## Notes
+## Branches
 
-- Si certains noms de classes/identifiants paraissent très IA, j’ai utilisé ChatGPT pour m’aider à uniformiser le code en anglais, ce qui a pu renommer certaines choses.
-- Polices : chargées via Google Fonts.
-- Le respect strict des contraintes W3C empêcherait d’obtenir le design souhaité, certaines règles sont donc volontairement assouplies (Balise a).
+- `main` contient la version actuelle du site ;
+- `old` conserve la version précédente.
+
+## Auteur
+
+Projet réalisé par [Matthieu Leconte](https://github.com/matthieuleconte1).
