@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Métadonnées, feuilles de style et polices de la page d'accueil. -->
     <meta charset="UTF-8">
     <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="CSS/button-refresh.css">
     <meta name="description" content="Service d'hébergement et cloud privé open-source basé sur Proxmox et Nextcloud.">
     <title>Attenna Cloud et Hosting</title>
+    <link rel="icon" href="pictures/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="pictures/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="pictures/favicon-192.png">
+    <link rel="apple-touch-icon" href="pictures/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
@@ -13,6 +19,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+<canvas id="fft-ocean-background" class="ocean-background" aria-hidden="true"></canvas>
+<!-- En-tête commun : accès au site, à WireGuard, au profil et au dépôt. -->
 <header id="top">
  <div class="header-left">
     <a href="https://attenna.net">
@@ -42,65 +50,108 @@
         </a>
         </div>
 </header>
+<!-- Accroche présentant la nature du service. -->
 <div class="centered-text" class="intro">
     <h2>Service privé opensource</h2>
     <h3>D'hébergement et de Cloud.</h3>
 </div>
 
+<!-- Raccourcis vers les services Attenna ; le lien PVE révèle aussi Mini PVE. -->
 <div class="button">
     <div class="pve-dropdown">
         <a href="https://pve.attenna.net" target="_blank">
-            <button class="orange pve-button">
-                <span class="pve-label">PVE</span>
-                <svg class="pve-caret" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M6 9l6 6l6 -6"></path>
-                </svg>
+            <button class="service-button orange pve-button">
+                <span class="button-icon button-icon-in" aria-hidden="true">
+                    <svg viewBox="0 0 64 48"><path d="M4 4h11l17 20-17 20H4l17-20zM60 4H49L32 24l17 20h11L43 24z"></path></svg>
+                </span>
+                <span class="button-label">PVE</span>
+                <span class="button-icon button-icon-out" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+                </span>
             </button>
         </a>
-        <a href="https://pve2.attenna.net" class="pve-mini" target="_blank">Mini PVE</a>
+        <a href="https://pve2.attenna.net" class="pve-mini" target="_blank">
+            <span class="button-icon button-icon-in pve-mini-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"></rect><rect x="3" y="13" width="18" height="7" rx="2"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>
+            </span>
+            <span class="pve-mini-label">Mini PVE</span>
+        </a>
     </div>
     <a href="HTML/A-Propos.html">
-        <button class="white">A Propos</button>
+        <button class="service-button white">
+            <span class="button-icon button-icon-in" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7.25v.5"></path></svg>
+            </span>
+            <span class="button-label">À propos</span>
+            <span class="button-icon button-icon-out" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            </span>
+        </button>
     </a>
     <a href="https://cloud.attenna.net" target="_blank">
-        <button class="gray">Cloud</button>
+        <button class="service-button gray">
+            <span class="button-icon button-icon-in" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7.2 18.5h10.2a4.1 4.1 0 0 0 .5-8.2A6 6 0 0 0 6.5 9a4.8 4.8 0 0 0 .7 9.5Z"></path></svg>
+            </span>
+            <span class="button-label">Cloud</span>
+            <span class="button-icon button-icon-out" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+            </span>
+        </button>
+    </a>
+    <a href="https://maison.attenna.net" target="_blank" rel="noopener noreferrer">
+        <button class="service-button home-assistant" aria-label="Home Assistant">
+            <span class="button-icon button-icon-in" aria-hidden="true">
+                <img src="pictures/home-assistant-logomark.svg" alt="">
+            </span>
+            <span class="button-label home-assistant-label" aria-hidden="true">
+                <span class="home-assistant-label-short">Home Assist.</span>
+                <span class="home-assistant-label-full">Home Assistant</span>
+            </span>
+            <span class="button-icon button-icon-out" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+            </span>
+        </button>
     </a>
     <a href="HTML/Matthieu.html">
-        <button class="black">Mon Profil</button>
+        <button class="service-button black">
+            <span class="button-icon button-icon-in" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>
+            </span>
+            <span class="button-label">Mon profil</span>
+            <span class="button-icon button-icon-out" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            </span>
+        </button>
     </a>
 </div>
-    <div class="divider-white" id="content-start">
-        <h2>A Propos du PVE</h2>
-        <div class="row">
-            <img src="pictures/Proxmox-logo.png" alt="Proxmox"/>
-            <p>
-                PVE est l'acronime de Proxmox Virtual Environement ce qui est un
-                <a href="https://fr.wikipedia.org/wiki/Hyperviseur">hyperviseur</a>
-                libre et Open source permettant de créer,
-                gérer et superviser des machines virtuelles et des conteneurs LXC sur un même serveur,
-                avec une interface web complète et des outils avancés de haute disponibilité,
-                de sauvegarde et de gestion du stockage.</p>
+
+<!-- Panneau enrichi par service-status.js pour afficher l'état des services. -->
+<div class="status-monitor" data-state="checking">
+    <button class="status-trigger" type="button" aria-expanded="false" aria-controls="service-status-panel">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="service-status-label" aria-live="polite">Vérification des services…</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>
+    </button>
+
+    <div class="service-status-panel" id="service-status-panel">
+        <div class="status-panel-head">
+            <p>État des services</p>
+            <span>Mise à jour automatique</span>
         </div>
+        <ul>
+            <li data-service-row="pve"><i></i><a href="https://pve.attenna.net" target="_blank">PVE</a><strong>Vérification…</strong></li>
+            <li data-service-row="cloud"><i></i><a href="https://cloud.attenna.net" target="_blank">Cloud</a><strong>Vérification…</strong></li>
+            <li data-service-row="pve2"><i></i><a href="https://pve2.attenna.net" target="_blank">Mini PVE</a><strong>Vérification…</strong></li>
+            <li data-service-row="vault"><i></i><a href="https://vault.attenna.net/#/login" target="_blank">Vault</a><strong>Vérification…</strong></li>
+            <li data-service-row="wireguard"><i></i><a href="https://wg.attenna.net" target="_blank">WireGuard</a><strong>Vérification…</strong></li>
+            <li data-service-row="home-assistant"><i></i><a href="https://maison.attenna.net" target="_blank" rel="noopener noreferrer">Home Assistant</a><strong>Vérification…</strong></li>
+        </ul>
+        <p class="status-note">Test effectué depuis votre navigateur</p>
     </div>
-    <div class="divider-gray">
-        <h2>Et le cloud alors ?</h2>
-        <div class="row">
-            <img src="pictures/Nextcloud_Logo.svg.png" alt="Nextcloud logo"/>
-            <p>
-                Ici, on parle de <a href="https://nextcloud.com">Nextcloud</a>, une plateforme libre et open-source pensée pour le stockage, la synchronisation et
-                le partage de fichiers… mais pas que. Elle propose aussi des outils de collaboration en ligne, un système de
-                gestion des utilisateurs, du chiffrement des données, et un accès sécurisé depuis n’importe quel appareil. C’est
-                comme avoir son propre Google Drive, mais sans les pubs ni les yeux indiscrets de multinationales.
-            </p>
-        </div>
-    </div>
-<footer>
-    <div class="footer">
-        <a href="mailto:matthieu.leconte@etu.unicaen.fr">Contactez-Moi !</a>
-    </div>
-</footer>
-<span class="scroll-hint" aria-hidden="true">↓</span>
-<a href="#top" class="scroll-top-link" aria-label="Remonter en haut de la page">↑</a>
-<script src="JS/scroll-arrows.js?v=4" defer></script>
+</div>
+<!-- Chargé après le HTML afin que les éléments du moniteur soient disponibles. -->
+<script type="module" src="JS/service-status.js?v=3"></script>
+<script type="module" src="JS/fft-ocean.ts"></script>
 </body>
 </html>

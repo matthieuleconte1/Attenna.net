@@ -1,0 +1,710 @@
+/*
+ * Couche de finition commune aux pages secondaires (À propos, profil, WireGuard, horloge).
+ * Elle est chargée après les feuilles spécifiques : ses sélecteurs qualifiés harmonisent
+ * couleurs, fond, composants et accessibilité sans modifier le HTML.
+ */
+:root {
+    --site-bg: #171717;
+    --site-surface: #242424;
+    --site-surface-soft: #2d2d2d;
+    --site-border: rgba(255, 255, 255, 0.1);
+    --site-text: #f4f4f4;
+    --site-muted: #949494;
+    --site-accent: #ed6a0c;
+    --site-accent-hover: #ff8126;
+    --site-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Variables globales et socle de rendu. */
+html {
+    display: block;
+    min-height: 100%;
+    height: auto;
+    background: var(--site-bg);
+}
+
+/* Cadre partagé : palette sombre, typographie et fond en couches. */
+body.site-page {
+    position: relative;
+    display: block;
+    isolation: isolate;
+    min-height: 100vh;
+    height: auto;
+    margin: 0;
+    overflow-x: hidden;
+    color: var(--site-text);
+    background: var(--site-bg);
+    font-family: "Red Hat Display", sans-serif;
+}
+
+.about-page {
+    animation: aboutBackgroundTone 2s ease-in-out forwards;
+}
+
+.profile-page {
+    background-color: #171717;
+    animation: none;
+}
+
+body.site-page::after {
+    content: "";
+    position: fixed;
+    right: -34vmax;
+    bottom: -48vmax;
+    left: auto;
+    width: 82vmax;
+    height: 82vmax;
+    background: url("../pictures/blob.svg") center / contain no-repeat;
+    opacity: 0.55;
+    filter: none;
+    transform: none;
+    animation: unifiedBlob 9s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* En-tête commun et indicateurs de focus clavier. */
+.site-page header {
+    position: relative;
+    top: auto;
+    left: auto;
+    z-index: 10;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transform: none;
+}
+
+.site-page header:hover {
+    background: transparent;
+}
+
+.site-page .header-left,
+.site-page .header-right {
+    display: flex;
+    align-items: center;
+}
+
+.site-page .header-right {
+    margin-left: auto;
+}
+
+.site-page #icon {
+    display: block;
+    width: min(500px, 54vw);
+    height: auto;
+    margin: 0;
+}
+
+.site-page #github-logo,
+.site-page #logo-Github {
+    width: 50px;
+    height: auto;
+    margin: 0 30px 0 0;
+    border-radius: 999px;
+    opacity: 0.86;
+    box-shadow: none;
+    transition: opacity 180ms ease, transform 240ms var(--site-ease);
+}
+
+.site-page #github-logo:hover,
+.site-page #logo-Github:hover {
+    opacity: 1;
+    box-shadow: none;
+    transform: translateY(-2px);
+}
+
+.site-page a:focus-visible,
+.site-page button:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.78);
+    outline-offset: 4px;
+}
+
+/* À propos : panneaux d'information, hiérarchie de texte et liste de services. */
+.about-page .panel-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(1120px, calc(100% - 48px));
+    margin: 54px auto 0;
+    gap: 20px;
+}
+
+.about-page .panel-container + .panel-container {
+    grid-template-columns: 1fr;
+    margin-top: 20px;
+    margin-bottom: 80px;
+}
+
+.about-page .panel-one,
+.about-page .panel-two,
+.about-page .panel-three {
+    padding: clamp(28px, 4vw, 48px);
+    border: 1px solid var(--site-border);
+    border-radius: 24px;
+    color: var(--site-text);
+    background: var(--site-surface);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    text-align: left;
+}
+
+.about-page .panel-two {
+    background: var(--site-surface-soft);
+}
+
+.about-page h2,
+.about-page h3 {
+    margin: 0 0 20px;
+    text-align: left;
+    font-family: "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 1.06;
+}
+
+.about-page h2 {
+    font-size: clamp(30px, 4vw, 54px);
+}
+
+.about-page h3 {
+    margin-top: 34px;
+    color: var(--site-muted);
+    font-size: clamp(21px, 2.4vw, 30px);
+}
+
+.about-page p,
+.about-page ul {
+    margin: 0;
+    color: #c6c6c6;
+    font-size: clamp(16px, 1.45vw, 19px);
+    line-height: 1.65;
+}
+
+.about-page ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 34px;
+    padding-left: 22px;
+}
+
+.about-page .panel-three li {
+    margin-bottom: 16px;
+}
+
+.about-page strong {
+    color: #fff;
+}
+
+/* Profil : halo, composition du héros, portrait et biographie. */
+.profile-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    display: block;
+    background: rgba(0, 0, 0, 0.76);
+    mix-blend-mode: normal;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    backdrop-filter: blur(30px) saturate(135%);
+    -webkit-backdrop-filter: blur(30px) saturate(135%);
+    animation: profileGlassOpacity 2s ease-in-out forwards;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.profile-page::after {
+    right: -22vmax;
+    bottom: -38vmax;
+    width: 92vmax;
+    height: 92vmax;
+    opacity: 0.72;
+    filter: blur(26px);
+    z-index: 0;
+}
+
+.profile-page header,
+.profile-page .hero,
+.profile-page .back-to-top {
+    position: relative;
+    z-index: 2;
+}
+
+.profile-page .glow {
+    display: none;
+}
+
+.profile-page .hero {
+    box-sizing: border-box;
+    width: min(1120px, calc(100% - 48px));
+    min-height: 0;
+    margin: 70px auto 100px;
+    padding: 0;
+    gap: 28px;
+}
+
+.profile-page .hero-title {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    color: #fff;
+    font-family: "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+    font-size: clamp(52px, 9vw, 126px);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.95;
+    white-space: normal;
+}
+
+.profile-page .hero-title-outline {
+    color: var(--site-muted);
+    -webkit-text-stroke: 0;
+}
+
+.profile-page .profile-frame {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 26px 0 0;
+    padding: 0;
+    align-self: auto;
+    justify-content: flex-end;
+    transition: none;
+}
+
+.profile-page .profile-frame:hover {
+    transform: none;
+}
+
+.profile-page .Profile img {
+    display: block;
+    width: clamp(240px, 32vw, 400px);
+    border-radius: 24px;
+}
+
+.profile-page .Margin-box {
+    padding: 0;
+}
+
+.profile-page .TextBlock {
+    box-sizing: border-box;
+    width: min(760px, 100%);
+    max-width: none;
+    padding: clamp(28px, 4vw, 48px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 24px;
+    color: #c8c8c8;
+    background: rgba(10, 10, 10, 0.5);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 18px 42px rgba(0, 0, 0, 0.34);
+    font-family: "Red Hat Display", sans-serif;
+    font-size: clamp(16px, 1.5vw, 19px);
+    line-height: 1.7;
+    backdrop-filter: blur(24px) saturate(135%);
+    -webkit-backdrop-filter: blur(24px) saturate(135%);
+    transition: none;
+}
+
+.profile-page .TextBlock:hover {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.07),
+        0 20px 46px rgba(0, 0, 0, 0.38);
+}
+
+/* WireGuard : composition volontairement sobre et sans décor animé. */
+.wg-page {
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 44%, rgba(255, 255, 255, 0.045), transparent 34%),
+        #111111;
+}
+
+body.site-page.wg-page::before,
+body.site-page.wg-page::after {
+    display: none;
+}
+
+.wg-page header,
+.wg-page .wg-center {
+    position: fixed;
+    z-index: 5;
+}
+
+.wg-page header {
+    top: 0;
+    right: 0;
+    left: 0;
+}
+
+.wg-neon-background,
+.wg-neon-background::before,
+.wg-neon-background::after {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+.wg-neon-background {
+    z-index: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.035), transparent 29%),
+        linear-gradient(145deg, rgba(255, 31, 122, 0.025), transparent 40%, rgba(40, 207, 255, 0.035));
+}
+
+.wg-neon-background::before {
+    content: "";
+    inset: -12%;
+    background:
+        conic-gradient(from 200deg at 50% 50%, transparent 0 18%, rgba(255, 27, 112, 0.2) 25%, transparent 34% 55%, rgba(60, 226, 255, 0.15) 63%, transparent 71%);
+    filter: blur(48px) saturate(125%);
+    opacity: 0.38;
+    transform: scale(1.04);
+}
+
+.wg-neon-background::after {
+    content: "";
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 18%, rgba(2, 2, 4, 0.14) 48%, rgba(2, 2, 4, 0.86) 100%);
+    z-index: 4;
+}
+
+#wg-particle-field {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: min(1040px, 96vmax);
+    height: min(1040px, 96vmax);
+    max-width: none;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    filter: contrast(125%) drop-shadow(0 0 14px rgba(134, 161, 255, 0.12));
+}
+
+.wg-aurora {
+    position: absolute;
+    inset: -12%;
+    z-index: 1;
+    background:
+        radial-gradient(ellipse at 26% 42%, rgba(255, 30, 104, 0.16), transparent 24%),
+        radial-gradient(ellipse at 72% 54%, rgba(47, 213, 255, 0.13), transparent 26%),
+        radial-gradient(ellipse at 50% 74%, rgba(124, 59, 255, 0.1), transparent 25%);
+    filter: blur(38px);
+    mix-blend-mode: screen;
+    transform: rotate(-5deg);
+}
+
+.wg-grid {
+    position: absolute;
+    inset: 48% -12% -38%;
+    z-index: 2;
+    opacity: 0.16;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+    background-size: 76px 76px;
+    mask-image: linear-gradient(to bottom, transparent, #000 35%, transparent 92%);
+    transform: perspective(520px) rotateX(66deg) scale(1.35);
+    transform-origin: center top;
+}
+
+.wg-noise {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    opacity: 0.065;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
+}
+
+.wg-page .wg-center {
+    gap: 16px;
+    width: min(760px, calc(100% - 48px));
+}
+
+.wg-page .center-pill {
+    min-height: 66px;
+    padding: 0 70px 0 28px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.9);
+    background: #191919;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+}
+
+.wg-page .center-pill:hover {
+    border-color: rgba(255, 255, 255, 0.32);
+    background: #1d1d1d;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+}
+
+.wg-page .copy-icon,
+.wg-page .copy-icon::before {
+    border-color: rgba(255, 255, 255, 0.66);
+}
+
+.wg-page .center-pill.copied .copy-icon {
+    border-color: #ffffff;
+}
+
+.wg-page .center-pill.copied .copy-icon::after {
+    border-left-color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+.wg-page .terminal-button {
+    min-width: 170px;
+    min-height: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.9);
+    background: transparent;
+    box-shadow: none;
+    font-family: "Red Hat Display", sans-serif;
+    font-weight: 700;
+}
+
+.wg-page .terminal-button:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: none;
+    transform: translateY(-1px);
+}
+
+@keyframes wgSpectrumOrbit {
+    to {
+        transform: translate3d(calc(var(--wg-pointer-x) * 2.4vw), calc(var(--wg-pointer-y) * 2.4vh), 0) rotate(360deg) scale(1.06);
+    }
+}
+
+@keyframes wgAuroraBreathe {
+    from {
+        opacity: 0.58;
+        transform: translate3d(calc(var(--wg-pointer-x) * -3vw), calc(var(--wg-pointer-y) * -3vh), 0) rotate(-8deg) scale(0.94);
+    }
+    to {
+        opacity: 0.92;
+        transform: translate3d(calc(var(--wg-pointer-x) * -3vw), calc(var(--wg-pointer-y) * -3vh), 0) rotate(7deg) scale(1.08);
+    }
+}
+
+@keyframes wgGridTravel {
+    to {
+        background-position: 0 76px, 0 76px;
+    }
+}
+
+@keyframes wgNoiseShift {
+    0% { transform: translate3d(-3%, 2%, 0); }
+    25% { transform: translate3d(2%, -4%, 0); }
+    50% { transform: translate3d(4%, 3%, 0); }
+    75% { transform: translate3d(-4%, -2%, 0); }
+    100% { transform: translate3d(1%, 4%, 0); }
+}
+
+/* Horloge : terminal cohérent avec la palette WireGuard. */
+.clock-page {
+    color: #fff;
+}
+
+body.site-page.clock-page::before,
+body.site-page.clock-page::after {
+    display: none;
+}
+
+.clock-page .terminal-window {
+    width: min(760px, 100%);
+    border: 1px solid var(--site-border);
+    border-radius: 24px;
+    background: var(--site-surface);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.36);
+}
+
+.clock-page .terminal-topbar {
+    min-height: 44px;
+    padding: 0 18px;
+    border-bottom-color: var(--site-border);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.clock-page .window-dot {
+    width: 9px;
+    height: 9px;
+    background: var(--site-accent);
+    opacity: 1;
+}
+
+.clock-page .window-dot:nth-child(2) {
+    background: #777;
+}
+
+.clock-page .window-dot:nth-child(3) {
+    background: #aaa;
+}
+
+.clock-page .terminal-line,
+.clock-page .muted {
+    color: var(--site-muted);
+}
+
+.clock-page .clock {
+    color: #fff;
+    text-shadow: none;
+}
+
+.clock-page .cursor {
+    color: var(--site-accent-hover);
+}
+
+.site-page .back-to-top {
+    right: 28px;
+    bottom: 28px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--site-border);
+    border-radius: 14px;
+    color: #fff;
+    background: var(--site-surface);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+    font-size: 19px;
+    opacity: 1;
+    backdrop-filter: none;
+}
+
+.site-page .back-to-top:hover {
+    background: var(--site-surface-soft);
+    transform: translateY(-3px);
+}
+
+@keyframes unifiedBlob {
+    from { transform: rotate(-8deg) translate3d(-2vw, 1vh, 0); }
+    to { transform: rotate(8deg) translate3d(2vw, -1vh, 0); }
+}
+
+@keyframes aboutBackgroundTone {
+    from { background-color: #171717; }
+    to { background-color: #0c0c0c; }
+}
+
+@keyframes profileGlassOpacity {
+    from { opacity: 0.72; }
+    to { opacity: 1; }
+}
+
+/* Mise en colonne et redimensionnement des composants sur mobile. */
+@media (max-width: 760px) {
+    .site-page header {
+        top: auto;
+        width: auto;
+        padding: 12px 16px;
+        flex-direction: row;
+    }
+
+    .site-page #icon {
+        width: min(300px, 66vw);
+    }
+
+    .site-page #github-logo,
+    .site-page #logo-Github {
+        display: block;
+        width: 38px;
+        margin-right: 4px;
+    }
+
+    .about-page .panel-container,
+    .about-page .panel-container + .panel-container {
+        grid-template-columns: 1fr;
+        width: min(100% - 28px, 560px);
+        margin-top: 24px;
+        gap: 14px;
+    }
+
+    .about-page .panel-container + .panel-container {
+        margin-bottom: 70px;
+    }
+
+    .about-page ul {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-page .hero {
+        width: min(100% - 28px, 620px);
+        margin: 44px auto 80px;
+        padding: 0;
+    }
+
+    .profile-page .hero-title {
+        margin: 0;
+    }
+
+    .profile-page .profile-frame {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .profile-page .Profile {
+        width: auto;
+    }
+
+    .profile-page .Profile img {
+        width: min(76vw, 340px);
+    }
+
+    .profile-page .TextBlock {
+        width: 100%;
+        padding: 26px;
+    }
+
+    .wg-page .wg-center {
+        width: calc(100% - 28px);
+    }
+
+    .wg-page .center-pill {
+        min-height: 62px;
+        padding: 0 54px 0 18px;
+        border-radius: 20px;
+    }
+
+    .wg-page .command-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .clock-page .terminal-shell {
+        padding: 14px;
+    }
+
+    .clock-page .terminal-window {
+        border-radius: 20px;
+    }
+}
+
+/* Respecte la préférence utilisateur en supprimant les animations non essentielles. */
+@media (prefers-reduced-motion: reduce) {
+    body.site-page::after {
+        animation: none;
+    }
+
+    .about-page {
+        animation: none;
+        background-color: #171717;
+    }
+
+    .profile-page::before {
+        animation: none;
+        opacity: 1;
+    }
+
+    .wg-neon-background::before,
+    .wg-aurora,
+    .wg-grid,
+    .wg-noise {
+        animation: none;
+    }
+}

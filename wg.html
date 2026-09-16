@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- Ressources visuelles de la page d'installation WireGuard. -->
     <link rel="stylesheet" href="CSS/style-wg.css">
+    <link rel="stylesheet" href="CSS/unified-pages.css">
     <meta charset="UTF-8">
     <title>WG - Attenna.net</title>
+    <link rel="icon" href="pictures/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="pictures/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="pictures/favicon-192.png">
+    <link rel="apple-touch-icon" href="pictures/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body id="top">
+<body id="top" class="site-page wg-page">
+<!-- En-tête minimal de la page WireGuard. -->
 <header>
     <div class="header-left">
         <a href="https://attenna.net">
@@ -23,6 +31,7 @@
         </a>
     </div>
 </header>
+<!-- Action principale : copier la commande, puis accéder à l'horloge démo. -->
 <main class="wg-center">
     <button type="button" class="center-pill" data-copy-command="curl -fsSL https://wg.attenna.net | sudo bash">
         <span class="command-text">curl -fsSL https://wg.attenna.net | sudo bash</span>
@@ -30,10 +39,11 @@
     </button>
     <a href="horloge.html" class="terminal-button">Horloge</a>
 </main>
-<div class="wg-lines" aria-hidden="true"></div>
 <script>
+    // Bouton qui porte la commande dans son attribut data, pour éviter de la dupliquer.
     const copyButton = document.querySelector(".center-pill");
 
+    // Copie via l'API moderne, avec une solution de repli pour les contextes non sécurisés.
     async function copyText(text) {
         if (navigator.clipboard && window.isSecureContext) {
             await navigator.clipboard.writeText(text);
@@ -51,6 +61,7 @@
         document.body.removeChild(textarea);
     }
 
+    // Déclenche la copie puis relance la classe d'animation de confirmation.
     copyButton.addEventListener("click", async () => {
         await copyText(copyButton.dataset.copyCommand);
         copyButton.classList.remove("copied");

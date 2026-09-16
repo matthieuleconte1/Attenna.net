@@ -1,18 +1,58 @@
+/*
+ * Page d'accueil : fond, en-tête, boutons de services et indicateurs de défilement.
+ * Les règles sont organisées par composant ; les breakpoints conservent le même rendu
+ * fonctionnel sur petits écrans et les préférences d'accessibilité.
+ */
 html {
-    min-height: 100%;
-    overflow-x: hidden;
+    height: 100%;
+    overflow: hidden;
     scroll-behavior: smooth;
+    background: #080604;
 }
 
 
 
+/* Cadre général et typographie de l'écran d'accueil. */
 body {
-    min-height: 100vh;
-    background-color: #171717;
+    min-height: 100%;
+    margin: 0;
+    background-color: #080604;
     font-family: "Red Hat Display", sans-serif;
     font-size: 18px;
-    overflow-x: hidden;
+    overflow: hidden;
+    isolation: isolate;
+}
 
+.ocean-background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    touch-action: none;
+    transform: translateY(10vh);
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 34%,
+        rgba(0, 0, 0, 0.08) 45%,
+        rgba(0, 0, 0, 0.62) 68%,
+        #000000 86%,
+        #000000 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 34%,
+        rgba(0, 0, 0, 0.08) 45%,
+        rgba(0, 0, 0, 0.62) 68%,
+        #000000 86%,
+        #000000 100%
+    );
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
 }
 
 img, video { max-width: 100%; height: auto; }
@@ -42,6 +82,7 @@ h3:hover {
     font-weight: 800;
 }
 
+/* Apparition progressive des titres, par variation de graisse de police. */
 @keyframes headingWeightIntro {
     from {
         font-weight: 800;
@@ -52,6 +93,7 @@ h3:hover {
 }
 
 /* Button container layout */
+/* Disposition de la grille de raccourcis vers les services. */
 .button{
     display: flex;
     justify-content: center;
@@ -64,6 +106,7 @@ h3:hover {
     text-decoration: none;
 }
 
+/* Groupe PVE : son sous-lien Mini PVE est révélé au survol ou au focus. */
 .pve-dropdown {
     position: relative;
     display: inline-flex;
@@ -171,6 +214,7 @@ button:active {
     transform: translateY(-2px) scale(0.98);
 }
 
+/* Déplacement du reflet appliqué aux boutons. */
 @keyframes buttonGlowDrift {
     from {
         transform: translate(-14%, -10%) rotate(-8deg);
@@ -181,6 +225,7 @@ button:active {
 }
 
 /* Orange button */
+/* Variantes chromatiques et détails spécifiques des boutons de service. */
 .orange {
     --button-bg: linear-gradient(135deg, rgba(255, 184, 38, 0.96), rgba(244, 88, 3, 0.94));
     --button-color: #ffffff;
@@ -308,6 +353,7 @@ button:active {
     -webkit-tap-highlight-color: transparent;
     justify-content: center;
 }
+/* Texte d'introduction centré au-dessus des actions. */
 .centered-text {
     text-align: center;
 }
@@ -320,6 +366,7 @@ button:active {
 }
 
 /* Header */
+/* En-tête et icônes de navigation. */
 header {
     display: flex;
     align-items: center;
@@ -338,6 +385,7 @@ header {
     gap: 20px;
 }
 
+/* Bouton WireGuard : les morceaux du pictogramme se séparent à l'interaction. */
 .vpn-circle {
     display: inline-flex;
     align-items: center;
@@ -417,11 +465,12 @@ header {
     box-shadow: 0 0 18px rgba(255, 255, 255, 0.8);
 }
 /* Circle hover effect */
+/* Avatar : bascule entre l'image fixe et le GIF au survol. */
 .circle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    display: inline-block;
+    display: block;
     margin-right: 20px;
     position: relative;
     overflow: hidden;
@@ -431,28 +480,34 @@ header {
 }
 
 .circle img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     position: absolute;
+    inset: 0;
 }
 
 .circle .avatar {
     background: white;
     opacity: 1;
+    z-index: 2;
     transition: opacity 0.5s ease;
 }
 
 .circle .gif {
-    opacity: 0;
+    opacity: 1;
+    z-index: 1;
     transition: opacity 0.5s ease;
 }
 
-.circle:hover .avatar {
+.circle:hover .avatar,
+.circle:focus-within .avatar {
     opacity: 0;
 }
 
-.circle:hover .gif {
+.circle:hover .gif,
+.circle:focus-within .gif {
     opacity: 1;
 }
 
@@ -462,19 +517,21 @@ header {
 
 
 /* Animated blob background */
+/* Calques décoratifs animés placés en arrière-plan de la page. */
 body {
     position: relative;
 }
 
 body:before {
     content: "";
-    position: absolute;
+    position: fixed;
     top: 100vh;
     left: 70%;
     width: 80vmax;
     height: 80vmax;
     background: url("../pictures/blob.svg") no-repeat bottom right;
     background-size: contain;
+    display: none;
     opacity: 1;
     pointer-events: none;
     animation: blobSwing 7s ease-in-out infinite alternate;
@@ -484,13 +541,14 @@ body:before {
 
 body::after {
     content: "";
-    position: absolute;
+    position: fixed;
     top: 40vh;
     right: 65%;
     width: 80vmax;
     height: 80vmax;
     background: url("../pictures/blob.svg") no-repeat bottom left;
     background-size: contain;
+    display: none;
     opacity: 1;
     pointer-events: none;
     animation: blobSwingReverse 7s ease-in-out infinite alternate;
@@ -534,6 +592,7 @@ body::after {
     }
 }
 
+/* Séparateurs décoratifs réutilisables, avec reflet animé. */
 .divider-white{
     position: relative;
     overflow: hidden;
@@ -668,6 +727,7 @@ body::after {
     box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
 }
 
+/* Pied de page éventuel et contrôles de défilement. */
 .footer {
     display: flex;
     background: #0c0c0c;
@@ -745,6 +805,7 @@ body::after {
 }
 
 /* Ajustements pour mobile */
+/* Réorganisation des actions et icônes sur mobile. */
 @media (max-width: 768px) {
     #server {
         display: none;
@@ -764,9 +825,43 @@ body::after {
         gap: 12px;
     }
 
+    /* Les titres respiraient mal : ils touchaient les bords et gardaient
+       l'interlignage des grandes tailles. */
+    .centered-text {
+        padding: 0 20px;
+        margin-bottom: 26px;
+    }
+
+    .centered-text h2 {
+        font-size: clamp(26px, 7.4vw, 38px);
+        line-height: 1.16;
+        letter-spacing: -0.01em;
+        text-wrap: balance;
+        margin-bottom: 10px;
+    }
+
+    .centered-text h3 {
+        font-size: clamp(16px, 4.6vw, 22px);
+        line-height: 1.3;
+        text-wrap: balance;
+        margin-bottom: 0;
+    }
+
     .pve-dropdown {
         flex-direction: column;
         align-items: center;
+        gap: 12px;
+    }
+
+    /* Le logo occupait près d'un quart de la hauteur d'écran : il n'était
+       borné que par max-width, sans taille propre au mobile. */
+    header {
+        padding: 6px 16px;
+    }
+
+    #icon {
+        width: min(52vw, 210px);
+        margin-right: 0;
     }
 
     button {
@@ -780,12 +875,7 @@ body::after {
 
     .pve-mini {
         position: static;
-        width: min(80vw, 220px);
-        height: auto;
-        min-height: 0;
-        padding: 12px 18px;
-        margin-top: 10px;
-        font-size: 22px;
+        margin-top: 0;
         opacity: 1;
         pointer-events: auto;
         transform: translateY(0) scale(1);

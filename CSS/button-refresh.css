@@ -1,0 +1,511 @@
+:root {
+    --micro-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --status-green: #78dd8b;
+    --status-amber: #efb85c;
+    --status-red: #ff6c67;
+}
+
+/*
+ * Composants complémentaires de l'accueil : boutons d'accès et moniteur de services.
+ * Ce fichier ne structure pas la page ; il affine les interactions de ces composants.
+ */
+/* Flat, solid-color buttons inspired by Alcove's simple call-to-action style. */
+/* Bouton de base et ses variantes de couleur pour chaque service. */
+.service-button {
+    position: relative;
+    display: inline-flex;
+    width: 200px;
+    height: 88px;
+    padding: 0 24px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--button-border);
+    border-radius: 24px;
+    background: var(--button-bg);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    font-family: "Red Hat Display", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    transition:
+        background-color 300ms ease,
+        border-color 300ms ease,
+        box-shadow 300ms ease,
+        transform 300ms var(--micro-ease);
+}
+
+.service-button.orange {
+    --button-bg: #ed6a0c;
+    --button-border: #ed6a0c;
+    --button-border-hover: #ff8126;
+}
+
+.service-button.white {
+    --button-bg: #f1f1f1;
+    --button-border: #f1f1f1;
+    --button-border-hover: #ffffff;
+}
+
+.service-button.gray {
+    --button-bg: #3b3b3b;
+    --button-border: #3b3b3b;
+    --button-border-hover: #505050;
+}
+
+.service-button.home-assistant {
+    --button-bg: #242424;
+    --button-border: #242424;
+    --button-border-hover: #505050;
+    color: #ffffff;
+}
+
+.service-button.home-assistant .home-assistant-label {
+    display: grid;
+    width: 112px;
+    place-items: center;
+    font-size: 18px;
+    translate: 10px 0;
+}
+
+.home-assistant-label-short,
+.home-assistant-label-full {
+    grid-area: 1 / 1;
+    transition: opacity 220ms ease, filter 220ms ease;
+}
+
+.home-assistant-label-full {
+    opacity: 0;
+    filter: blur(5px);
+}
+
+.service-button.home-assistant:hover .home-assistant-label-short,
+.service-button.home-assistant:focus-visible .home-assistant-label-short {
+    opacity: 0;
+    filter: blur(5px);
+}
+
+.service-button.home-assistant:hover .home-assistant-label-full,
+.service-button.home-assistant:focus-visible .home-assistant-label-full {
+    opacity: 1;
+    filter: none;
+}
+
+.service-button.home-assistant .button-icon-in img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.service-button.black {
+    --button-bg: #242424;
+    --button-border: #242424;
+    --button-border-hover: #383838;
+}
+
+.service-button.black {
+    display: none;
+}
+
+.service-button::before {
+    display: none;
+}
+
+.service-button::after {
+    display: none;
+}
+
+.service-button:hover,
+.service-button:focus-visible {
+    transform: translateY(-3px);
+    border-color: var(--button-border-hover);
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.36);
+    filter: none;
+}
+
+.service-button:active {
+    transform: translateY(0) scale(0.98);
+    transition-duration: 100ms;
+}
+
+/* Icônes et libellé se déplacent pour suggérer l'action au survol ou au focus. */
+.button-label {
+    position: relative;
+    z-index: 2;
+    white-space: nowrap;
+    transition: translate 300ms ease;
+}
+
+.button-icon {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    width: 25px;
+    height: 25px;
+    translate: 0 -50%;
+    transition:
+        opacity 300ms ease,
+        translate 300ms ease,
+        scale 300ms ease,
+        filter 300ms ease;
+}
+
+.button-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.button-icon-in {
+    left: 22px;
+    opacity: 1;
+}
+
+.button-icon-out {
+    right: 22px;
+    opacity: 0;
+    filter: blur(8px);
+    scale: 0.5 1;
+    translate: 100% -50%;
+}
+
+.service-button:hover .button-icon-in,
+.service-button:focus-visible .button-icon-in {
+    opacity: 0;
+    filter: blur(8px);
+    scale: 0.5 1;
+    translate: -100% -50%;
+}
+
+.service-button:hover .button-label,
+.service-button:focus-visible .button-label {
+    translate: -30px 0;
+}
+
+.service-button:hover .button-icon-out,
+.service-button:focus-visible .button-icon-out {
+    opacity: 1;
+    filter: none;
+    scale: 1;
+    translate: 0 -50%;
+}
+
+/* Lien secondaire Mini PVE, indépendant du bouton principal. */
+.pve-mini {
+    height: 78px;
+    border-radius: 24px;
+    font-family: "Red Hat Display", sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    color: #ffffff;
+    background: #ed6a0c;
+    border-color: #ed6a0c;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.pve-mini:hover,
+.pve-mini:focus-visible {
+    color: #ffffff;
+    border-color: #ff8126;
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.36);
+}
+
+/* L'icône du sous-lien n'apparaît que sur mobile, où Mini PVE est listé
+   parmi les autres boutons et doit donc suivre la même grammaire visuelle. */
+.pve-mini-icon {
+    display: none;
+}
+
+/* Service checker, added without changing the original page structure. */
+/* Bloc d'état piloté par service-status.js. */
+.status-monitor {
+    position: relative;
+    z-index: 30;
+    width: fit-content;
+    margin: 22px auto 0;
+}
+
+.status-trigger {
+    display: inline-flex;
+    width: auto;
+    min-width: 0;
+    height: 36px;
+    padding: 0 4px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 0;
+    border-radius: 0;
+    color: #a7a7aa;
+    background: transparent;
+    box-shadow: none;
+    cursor: pointer;
+    font: 500 12px/1 "Red Hat Display", sans-serif;
+    letter-spacing: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: color 180ms ease;
+}
+
+.status-trigger::before,
+.status-trigger::after {
+    display: none;
+}
+
+.status-trigger:hover,
+.status-trigger:focus-visible {
+    color: #fff;
+    background: transparent;
+    box-shadow: none;
+    filter: none;
+    transform: none;
+}
+
+.status-trigger svg {
+    position: static;
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.55;
+    transition: rotate 300ms var(--micro-ease);
+}
+
+.status-monitor.is-open .status-trigger svg {
+    rotate: 180deg;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+    border-radius: 50%;
+    background: var(--status-amber);
+    box-shadow: none;
+}
+
+.status-monitor[data-state="online"] .status-dot {
+    background: var(--status-green);
+    box-shadow: none;
+}
+
+.status-monitor[data-state="offline"] .status-dot {
+    background: var(--status-red);
+    box-shadow: none;
+}
+
+/* Panneau déroulant et styles de chaque service sondé. */
+.service-status-panel {
+    position: absolute;
+    top: calc(100% + 11px);
+    left: 50%;
+    width: 290px;
+    padding: 17px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
+    color: #d4d4d6;
+    background: rgba(20, 20, 22, 0.91);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.46);
+    opacity: 0;
+    pointer-events: none;
+    translate: -50% -7px;
+    scale: 0.98;
+    transform-origin: top center;
+    backdrop-filter: blur(22px) saturate(130%);
+    -webkit-backdrop-filter: blur(22px) saturate(130%);
+    transition: opacity 200ms ease, translate 280ms var(--micro-ease), scale 280ms var(--micro-ease);
+}
+
+.status-monitor.is-open .service-status-panel,
+.status-monitor:focus-within .service-status-panel {
+    opacity: 1;
+    pointer-events: auto;
+    translate: -50% 0;
+    scale: 1;
+}
+
+.status-panel-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    text-align: left;
+}
+
+.status-panel-head p,
+.status-panel-head span,
+.status-note {
+    margin: 0;
+}
+
+.status-panel-head p {
+    color: #f3f3f4;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-panel-head span {
+    color: #707074;
+    font-size: 9px;
+}
+
+.service-status-panel ul {
+    display: grid;
+    gap: 10px;
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.service-status-panel li {
+    display: grid;
+    grid-template-columns: 7px 1fr auto;
+    align-items: center;
+    gap: 9px;
+    font-size: 11px;
+}
+
+.service-status-panel li i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--status-amber);
+}
+
+.service-status-panel li[data-state="online"] i {
+    background: var(--status-green);
+    box-shadow: 0 0 8px rgba(120, 221, 139, 0.35);
+}
+
+.service-status-panel li[data-state="offline"] i {
+    background: var(--status-red);
+}
+
+.service-status-panel li a {
+    width: fit-content;
+    color: #c5c5c8;
+    text-decoration: none;
+}
+
+.service-status-panel li a:hover {
+    color: #fff;
+}
+
+.service-status-panel li strong {
+    color: #6e6e72;
+    font-weight: 600;
+}
+
+.service-status-panel li[data-state="online"] strong {
+    color: #8fc79a;
+}
+
+.service-status-panel li[data-state="offline"] strong {
+    color: #cf7976;
+}
+
+.status-note {
+    margin-top: 13px;
+    color: #69696d;
+    font-size: 9px;
+    text-align: left;
+}
+
+/* Adaptation du panneau aux écrans étroits. */
+@media (max-width: 768px) {
+    .service-button,
+    .service-button.black {
+        display: inline-flex;
+        width: min(80vw, 260px);
+        max-width: 260px;
+        height: 62px;
+        padding: 0 22px;
+        border-radius: 20px;
+        font-size: 18px;
+    }
+
+    /* Le profil se distingue de Home Assistant, qui partage le même gris. */
+    .service-button.black {
+        --button-bg: #0f0f0f;
+        --button-border: #343434;
+        --button-border-hover: #4a4a4a;
+    }
+
+    .button-icon-in {
+        left: 19px;
+    }
+
+    .button-icon-out {
+        right: 19px;
+    }
+
+    /* Mini PVE s'aligne sur les autres boutons : même gabarit, même icône.
+       box-sizing évite que le padding hérité ne gonfle la hauteur. */
+    .pve-mini {
+        position: relative;
+        top: auto;
+        left: auto;
+        box-sizing: border-box;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: min(80vw, 260px);
+        max-width: 260px;
+        height: 62px;
+        min-height: 0;
+        padding: 0 22px;
+        border-radius: 20px;
+        font-size: 18px;
+    }
+
+    .pve-mini-icon {
+        display: block;
+    }
+
+    /* Sur mobile le survol n'existe pas : le nom complet est toujours visible. */
+    .service-button.home-assistant .home-assistant-label {
+        width: auto;
+        translate: 0 0;
+    }
+
+    .home-assistant-label-short {
+        display: none;
+    }
+
+    .home-assistant-label-full {
+        opacity: 1;
+        filter: none;
+    }
+
+    .status-monitor {
+        margin-top: 18px;
+    }
+
+    .service-status-panel {
+        width: min(290px, calc(100vw - 28px));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .button-icon,
+    .button-label,
+    .service-button,
+    .service-status-panel,
+    .status-trigger,
+    .status-trigger svg {
+        transition-duration: 0.01ms !important;
+    }
+}

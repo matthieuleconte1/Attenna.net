@@ -1,3 +1,7 @@
+/*
+ * Base historique de la page profil : portrait, biographie, halo et décor animé.
+ * unified-pages.css, chargé après, centralise les dernières règles de cohérence.
+ */
 html,
 body {
     position: fixed;
@@ -15,6 +19,7 @@ body {
     scroll-behavior: smooth;
 }
 /* Film grain overlay */
+/* Grain léger superposé au fond pour donner de la matière au profil. */
 body::before {
     content: "";
     position: fixed;
@@ -42,6 +47,7 @@ h1 {
     z-index: 2;
 }
 
+/* Composition principale : titre, cadre du portrait et bloc biographique. */
 .hero {
     min-height: 10vh;
     display: flex;
@@ -76,6 +82,7 @@ h3 {
     z-index: 1;
 }
 
+/* Cadre et image du profil ; le survol renforce la présence visuelle. */
 .profile-frame {
     width: clamp(30vb, 90vb);
     padding: clamp(24px, 3.5vw, 60px);
@@ -100,6 +107,7 @@ h3 {
     height: auto ;
 }
 
+/* Encadrement et lecture de la biographie. */
 .Margin-box{
     padding-bottom: 4vb;
 }
@@ -125,6 +133,7 @@ h3 {
 }
 
 /* Button container layout */
+/* Styles historiques des boutons, disponibles pour les éléments réutilisant ces classes. */
 .button {
     display: flex;
     justify-content: center;
@@ -278,6 +287,7 @@ button:active {
 }
 
 /* Header */
+/* En-tête, logos et avatar animé. */
 header {
     z-index: 4;
     position: fixed;
@@ -386,6 +396,7 @@ header:hover {
 
 
 /* Animated blob background */
+/* Halo et animation d'entrée de la page. */
 body {
     position: relative;
 }
@@ -428,6 +439,7 @@ body {
 }
 
 /* Legibility */
+/* Ajustements graduels de la composition pour tablettes et mobiles. */
 @media (max-width: 1250px) {
     body::after {
         filter: blur(10px);
@@ -614,6 +626,7 @@ header {
     }
 }
 
+/* Ancre flottante de retour au début du profil. */
 .back-to-top {
     position: fixed;
     bottom: 40px;

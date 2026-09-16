@@ -1,0 +1,13 @@
+[
+  {
+    "label": "Site : Vite avec rechargement",
+    "command": "npm",
+    "args": ["run", "dev", "--", "--host", "127.0.0.1", "--port", "8014", "--strictPort"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "save": "all",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "show_summary": true,
+    "show_command": true
+  }
+]

@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- Styles de la fenêtre terminal et surcharges partagées avec les autres pages. -->
     <meta charset="UTF-8">
     <link rel="stylesheet" href="CSS/style-horloge.css">
+    <link rel="stylesheet" href="CSS/unified-pages.css">
     <title>Horloge Terminal</title>
+    <link rel="icon" href="pictures/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="pictures/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="pictures/favicon-192.png">
+    <link rel="apple-touch-icon" href="pictures/apple-touch-icon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
+<body class="site-page clock-page">
+<!-- Simulation d'un terminal affichant l'heure locale du navigateur. -->
 <main class="terminal-shell">
     <section class="terminal-window" aria-label="Horloge terminal">
         <div class="terminal-topbar">
@@ -22,8 +29,10 @@
     </section>
 </main>
 <script>
+    // Élément <time> mis à jour chaque seconde.
     const clock = document.getElementById("clock");
 
+    // Formate l'heure en français et conserve une valeur machine ISO dans datetime.
     function updateClock() {
         const now = new Date();
         const time = now.toLocaleTimeString("fr-FR", {
@@ -39,6 +48,7 @@
     updateClock();
     setInterval(updateClock, 1000);
 
+    // Le bouton rouge revient dans l'historique, ou vers WireGuard en accès direct.
     document.querySelector(".window-dot").addEventListener("click", () => {
         if (window.history.length > 1) {
             window.history.back();

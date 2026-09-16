@@ -1,3 +1,7 @@
+/*
+ * Base historique de la page WireGuard : en-tête, commande copiable et décor néon.
+ * unified-pages.css, chargé ensuite, harmonise ces règles avec les autres pages.
+ */
 html, body {
     min-height: 100%;
     height: 100%;
@@ -19,6 +23,7 @@ img, video {
     height: auto;
 }
 
+/* En-tête compact et ses icônes de navigation. */
 header {
     z-index: 5;
     position: fixed;
@@ -73,6 +78,7 @@ header:hover {
     box-shadow: 0 0 18px rgba(255, 255, 255, 0.8);
 }
 
+/* Zone centrale qui rassemble la commande d'installation et le lien Horloge. */
 .wg-center {
     position: fixed;
     top: 50%;
@@ -86,6 +92,7 @@ header:hover {
     transform: translate(-50%, -50%);
 }
 
+/* Bouton de copie : l'état .copied déclenche le retour visuel de confirmation. */
 .center-pill {
     position: relative;
     width: 100%;
@@ -186,6 +193,7 @@ header:hover {
     transform: rotate(-45deg) scale(1);
 }
 
+/* Lien secondaire vers la démonstration d'horloge terminal. */
 .terminal-button {
     display: inline-flex;
     align-self: center;
@@ -213,6 +221,7 @@ header:hover {
     box-shadow: 0 18px 42px rgba(0, 0, 0, 0.48);
 }
 
+/* Lueurs, lignes courbes et leurs animations du fond décoratif. */
 body::before,
 body::after {
     content: "";
@@ -385,6 +394,7 @@ body::after {
     }
 }
 
+/* Réduction des espacements et de la commande sur mobile. */
 @media (max-width: 768px) {
     header {
         top: 18px;

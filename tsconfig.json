@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "types": ["vite/client", "@webgpu/types"],
+    "skipLibCheck": true
+  },
+  "include": ["JS/**/*.ts", "fft-ocean/**/*.ts"],
+  "exclude": ["fft-ocean/index.tsx"]
+}
