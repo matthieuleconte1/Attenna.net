@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Métadonnées, feuilles de style et polices de la page d'accueil. -->
+    <meta charset="UTF-8">
+    <meta name="description" content="Service d'hébergement et cloud privé open-source basé sur Proxmox et Nextcloud.">
+    <title>Attenna Cloud et Hosting</title>
+    <link rel="icon" href="./assets/favicon-XZr2s-j-.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32-D-bxrHUi.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/favicon-192-Bxp4NDQp.png">
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon-tIcA68rZ.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="module" crossorigin src="./assets/index-DKTgomT2.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/fft-ocean-BSSyNOgI.js">
+  <link rel="modulepreload" crossorigin href="./assets/position-DzaSfxbC.js">
+  <link rel="stylesheet" crossorigin href="./assets/fft-ocean-BZ1FkcDu.css">
+  <link rel="stylesheet" crossorigin href="./assets/index-DVw8VcpA.css">
+</head>
+<body>
+<canvas id="fft-ocean-background" class="ocean-background" aria-hidden="true"></canvas>
+<!-- En-tête commun : accès au site, à WireGuard, au profil et au dépôt. -->
+<header id="top">
+ <div class="header-left">
+    <a href="https://attenna.net">
+        <img src="./assets/icon-BoRW_XeI.png" alt="icon" id="icon">
+    </a>
+ </div>
+
+        <div class="header-right">
+        <a href="wg.html" class="vpn-circle" aria-label="VPN">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path class="vpn-icon-plug vpn-icon-lower" d="M7 12l5 5l-1.5 1.5a3.536 3.536 0 1 1 -5 -5l1.5 -1.5z"></path>
+                <path class="vpn-icon-plug vpn-icon-upper" d="M17 12l-5 -5l1.5 -1.5a3.536 3.536 0 1 1 5 5l-1.5 1.5z"></path>
+                <path class="vpn-icon-plug vpn-icon-lower" d="M3 21l2.5 -2.5"></path>
+                <path class="vpn-icon-plug vpn-icon-upper" d="M18.5 5.5l2.5 -2.5"></path>
+                <path class="vpn-icon-plug vpn-icon-lower vpn-icon-leg" d="M10 11l-2 2"></path>
+                <path class="vpn-icon-plug vpn-icon-lower vpn-icon-leg" d="M13 14l-2 2"></path>
+            </svg>
+        </a>
+        <a href="HTML/Matthieu.html">
+            <div class="circle">
+                <img src="./assets/Matthieu-BJekcFYR.gif" class="gif" alt="Profile photo"/>
+                <img src="./assets/avatar-DmZtG3_U.png" class="avatar" alt="avatar"/>
+            </div>
+        </a>
+        <a href="https://github.com/matthieuleconte1/SAE14-Site" target="_blank">
+            <img src="./assets/github-white-icon-DcVatQky.webp" alt="GitHub" id="github-logo">
+        </a>
+        </div>
+</header>
+<!-- Accroche présentant la nature du service. -->
+<div class="centered-text" class="intro">
+    <h2>Service privé opensource</h2>
+    <h3>D'hébergement et de Cloud.</h3>
+</div>
+
+<!-- Raccourcis vers les services Attenna ; le lien PVE révèle aussi Mini PVE. -->
+<div class="button">
+    <div class="pve-dropdown">
+        <a href="https://pve.attenna.net" target="_blank">
+            <button class="service-button orange pve-button">
+                <span class="button-icon button-icon-in" aria-hidden="true">
+                    <svg viewBox="0 0 64 48"><path d="M4 4h11l17 20-17 20H4l17-20zM60 4H49L32 24l17 20h11L43 24z"></path></svg>
+                </span>
+                <span class="button-label">PVE</span>
+                <span class="button-icon button-icon-out" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+                </span>
+            </button>
+        </a>
+        <a href="https://pve2.attenna.net" class="pve-mini" target="_blank">
+            <span class="button-icon button-icon-in pve-mini-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"></rect><rect x="3" y="13" width="18" height="7" rx="2"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>
+            </span>
+            <span class="pve-mini-label">Mini PVE</span>
+        </a>
+    </div>
+    <a href="HTML/A-Propos.html">
+        <button class="service-button white">
+            <span class="button-icon button-icon-in" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7.25v.5"></path></svg>
+            </span>
+            <span class="button-label">À propos</span>
+            <span class="button-icon button-icon-out" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            </span>
+        </button>
+    </a>
+    <a href="https://cloud.attenna.net" target="_blank">
+        <button class="service-button gray">
+            <span class="button-icon button-icon-in" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7.2 18.5h10.2a4.1 4.1 0 0 0 .5-8.2A6 6 0 0 0 6.5 9a4.8 4.8 0 0 0 .7 9.5Z"></path></svg>
+            </span>
+            <span class="button-label">Cloud</span>
+            <span class="button-icon button-icon-out" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+            </span>
+        </button>
+    </a>
+    <a href="https://maison.attenna.net" target="_blank" rel="noopener noreferrer">
+        <button class="service-button home-assistant" aria-label="Home Assistant">
+            <span class="button-icon button-icon-in" aria-hidden="true">
+                <img src="data:image/svg+xml,%3csvg%20width='240'%20height='240'%20viewBox='0%200%20240%20240'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M229.39%20109.153L130.61%2010.3725C124.78%204.5425%20115.23%204.5425%20109.4%2010.3725L10.61%20109.153C4.78%20114.983%200%20126.512%200%20134.762V224.762C0%20233.012%206.75%20239.762%2015%20239.762H107.27L66.64%20199.132C64.55%20199.852%2062.32%20200.262%2060%20200.262C48.7%20200.262%2039.5%20191.062%2039.5%20179.762C39.5%20168.462%2048.7%20159.262%2060%20159.262C71.3%20159.262%2080.5%20168.462%2080.5%20179.762C80.5%20182.092%2080.09%20184.322%2079.37%20186.412L111%20218.042V102.162C104.2%2098.8225%2099.5%2091.8425%2099.5%2083.7725C99.5%2072.4725%20108.7%2063.2725%20120%2063.2725C131.3%2063.2725%20140.5%2072.4725%20140.5%2083.7725C140.5%2091.8425%20135.8%2098.8225%20129%20102.162V183.432L160.46%20151.972C159.84%20150.012%20159.5%20147.932%20159.5%20145.772C159.5%20134.472%20168.7%20125.272%20180%20125.272C191.3%20125.272%20200.5%20134.472%20200.5%20145.772C200.5%20157.072%20191.3%20166.272%20180%20166.272C177.5%20166.272%20175.12%20165.802%20172.91%20164.982L129%20208.892V239.772H225C233.25%20239.772%20240%20233.022%20240%20224.772V134.772C240%20126.522%20235.23%20115.002%20229.39%20109.162V109.153Z'%20fill='%23F2F4F9'/%3e%3c/svg%3e" alt="">
+            </span>
+            <span class="button-label home-assistant-label" aria-hidden="true">
+                <span class="home-assistant-label-short">Home Assist.</span>
+                <span class="home-assistant-label-full">Home Assistant</span>
+            </span>
+            <span class="button-icon button-icon-out" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+            </span>
+        </button>
+    </a>
+    <a href="HTML/Matthieu.html">
+        <button class="service-button black">
+            <span class="button-icon button-icon-in" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>
+            </span>
+            <span class="button-label">Mon profil</span>
+            <span class="button-icon button-icon-out" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            </span>
+        </button>
+    </a>
+</div>
+
+<!-- Moniteur de services : service-status.js le révèle, construit les lignes et suit les états. -->
+<div class="status-monitor" data-state="checking" hidden>
+    <button class="status-trigger" type="button" aria-expanded="false" aria-controls="service-status-panel">
+        <span class="status-pulse" aria-hidden="true"></span>
+        <span id="service-status-label" aria-live="polite">Vérification…</span>
+        <svg class="status-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>
+    </button>
+
+    <div class="service-status-panel" id="service-status-panel">
+        <div class="status-panel-head">
+            <div>
+                <div class="status-total-line">
+                    <p class="status-total"><b class="status-count">–</b><span>/<i class="status-size">–</i></span></p>
+                    <span class="status-pulse status-pulse-large" aria-hidden="true"></span>
+                </div>
+                <p class="status-summary">Vérification en cours</p>
+            </div>
+            <button class="status-refresh" type="button" aria-label="Relancer la vérification">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"></path><path d="M4 4v4h4"></path><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"></path><path d="M20 20v-4h-4"></path></svg>
+            </button>
+        </div>
+        <p class="status-updated" aria-live="off">Premier contrôle…</p>
+        <ul class="status-list"></ul>
+        <p class="status-note">Testé depuis votre navigateur, toutes les 60 secondes.</p>
+    </div>
+</div>
+<!-- Chargé après le HTML afin que les éléments du moniteur soient disponibles. -->
+</body>
+</html>

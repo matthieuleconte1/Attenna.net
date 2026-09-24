@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Métadonnées, feuilles de style et polices communes aux pages secondaires. -->
+    <meta charset="UTF-8">
+    <title>Horloge Terminal</title>
+    <link rel="icon" href="./assets/favicon-XZr2s-j-.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32-D-bxrHUi.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/favicon-192-Bxp4NDQp.png">
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon-tIcA68rZ.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="module" crossorigin src="./assets/fft-ocean-BSSyNOgI.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/fft-ocean-BZ1FkcDu.css">
+  <link rel="stylesheet" crossorigin href="./assets/unified-pages-CLqAnD9S.css">
+</head>
+<body class="site-page clock-page">
+<canvas id="fft-ocean-background" class="ocean-background" aria-hidden="true"></canvas>
+<!-- En-tête commun : accès au site, à WireGuard, au profil et au dépôt. -->
+<header>
+    <div class="header-left">
+        <a href="https://attenna.net">
+            <img src="./assets/icon-BoRW_XeI.png" alt="Attenna" id="icon">
+        </a>
+    </div>
+    <div class="header-right">
+        <a href="wg.html" class="vpn-circle" aria-label="VPN">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path class="vpn-icon-plug vpn-icon-lower" d="M7 12l5 5l-1.5 1.5a3.536 3.536 0 1 1 -5 -5l1.5 -1.5z"></path>
+                <path class="vpn-icon-plug vpn-icon-upper" d="M17 12l-5 -5l1.5 -1.5a3.536 3.536 0 1 1 5 5l-1.5 1.5z"></path>
+                <path class="vpn-icon-plug vpn-icon-lower" d="M3 21l2.5 -2.5"></path>
+                <path class="vpn-icon-plug vpn-icon-upper" d="M18.5 5.5l2.5 -2.5"></path>
+                <path class="vpn-icon-plug vpn-icon-lower vpn-icon-leg" d="M10 11l-2 2"></path>
+                <path class="vpn-icon-plug vpn-icon-lower vpn-icon-leg" d="M13 14l-2 2"></path>
+            </svg>
+        </a>
+        <a href="HTML/Matthieu.html" aria-label="Mon profil">
+            <div class="circle">
+                <img src="./assets/Matthieu-BJekcFYR.gif" class="gif" alt=""/>
+                <img src="./assets/avatar-DmZtG3_U.png" class="avatar" alt=""/>
+            </div>
+        </a>
+        <a href="https://github.com/matthieuleconte1/SAE14-Site" target="_blank">
+            <img src="./assets/github-white-icon-DcVatQky.webp" alt="GitHub" id="github-logo">
+        </a>
+    </div>
+</header>
+
+<!-- Simulation d'un terminal affichant l'heure locale du navigateur. -->
+<main class="page-main clock-layout">
+    <section class="surface-card terminal-window" aria-label="Horloge terminal">
+        <div class="terminal-topbar">
+            <button type="button" class="window-dot" aria-label="Retour page précédente"></button>
+            <span class="window-dot" aria-hidden="true"></span>
+            <span class="window-dot" aria-hidden="true"></span>
+            <span class="terminal-title" aria-hidden="true">attenna@wg — zsh</span>
+        </div>
+        <div class="terminal-content">
+            <p class="terminal-line"><span class="terminal-prompt">attenna@wg:~$</span> date +"%H:%M:%S"</p>
+            <time id="clock" class="clock" datetime=""></time>
+            <p class="terminal-line"><span class="terminal-prompt">attenna@wg:~$</span> <span class="cursor">_</span></p>
+        </div>
+    </section>
+</main>
+<script>
+    // Élément <time> mis à jour chaque seconde.
+    const clock = document.getElementById("clock");
+
+    // Formate l'heure en français et conserve une valeur machine ISO dans datetime.
+    function updateClock() {
+        const now = new Date();
+        const time = now.toLocaleTimeString("fr-FR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+
+        clock.textContent = time;
+        clock.dateTime = now.toISOString();
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Le bouton orange revient dans l'historique, ou vers WireGuard en accès direct.
+    document.querySelector(".window-dot").addEventListener("click", () => {
+        if (window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+
+        window.location.href = "wg.html";
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Métadonnées, feuilles de style et polices communes aux pages secondaires. -->
+    <meta charset="UTF-8">
+    <meta name="description" content="Matthieu Leconte, étudiant en Réseaux et Télécommunications : compétences, projets et services auto-hébergés sur attenna.net.">
+    <title>L'artiste</title>
+    <link rel="icon" href="../assets/favicon-XZr2s-j-.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32-D-bxrHUi.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/favicon-192-Bxp4NDQp.png">
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon-tIcA68rZ.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="module" crossorigin src="../assets/matthieu-DTDf5ZaR.js"></script>
+  <link rel="modulepreload" crossorigin href="../assets/fft-ocean-BSSyNOgI.js">
+  <link rel="modulepreload" crossorigin href="../assets/scroll-arrows-VW95vKe7.js">
+  <link rel="stylesheet" crossorigin href="../assets/fft-ocean-BZ1FkcDu.css">
+  <link rel="stylesheet" crossorigin href="../assets/unified-pages-CLqAnD9S.css">
+</head>
+<body id="top" class="site-page profile-page">
+<canvas id="fft-ocean-background" class="ocean-background" aria-hidden="true"></canvas>
+<!-- En-tête commun : accès au site, à WireGuard, au profil et au dépôt. -->
+<header>
+    <div class="header-left">
+        <a href="https://attenna.net">
+            <img src="../assets/icon-BoRW_XeI.png" alt="Attenna" id="icon">
+        </a>
+    </div>
+    <div class="header-right">
+        <a href="../wg.html" class="vpn-circle" aria-label="VPN">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path class="vpn-icon-plug vpn-icon-lower" d="M7 12l5 5l-1.5 1.5a3.536 3.536 0 1 1 -5 -5l1.5 -1.5z"></path>
+                <path class="vpn-icon-plug vpn-icon-upper" d="M17 12l-5 -5l1.5 -1.5a3.536 3.536 0 1 1 5 5l-1.5 1.5z"></path>
+                <path class="vpn-icon-plug vpn-icon-lower" d="M3 21l2.5 -2.5"></path>
+                <path class="vpn-icon-plug vpn-icon-upper" d="M18.5 5.5l2.5 -2.5"></path>
+                <path class="vpn-icon-plug vpn-icon-lower vpn-icon-leg" d="M10 11l-2 2"></path>
+                <path class="vpn-icon-plug vpn-icon-lower vpn-icon-leg" d="M13 14l-2 2"></path>
+            </svg>
+        </a>
+        <a href="Matthieu.html" aria-label="Mon profil" aria-current="page">
+            <div class="circle">
+                <img src="../assets/Matthieu-BJekcFYR.gif" class="gif" alt=""/>
+                <img src="../assets/avatar-DmZtG3_U.png" class="avatar" alt=""/>
+            </div>
+        </a>
+        <a href="https://github.com/matthieuleconte1/SAE14-Site" target="_blank">
+            <img src="../assets/github-white-icon-DcVatQky.webp" alt="GitHub" id="github-logo">
+        </a>
+    </div>
+</header>
+
+<main class="page-main profile-main">
+    <!-- Accroche, dans la même typographie que l'accueil. -->
+    <section class="page-hero">
+        <h1><span class="hero-muted">Matthieu</span> Leconte.</h1>
+        <p class="page-subtitle">Étudiant en Réseaux et Télécommunications.</p>
+        <p class="profile-lead">
+            J’aime comprendre comment fonctionnent les réseaux, de la couche physique jusqu’aux services,
+            et surtout les mettre en pratique à travers des projets concrets.
+        </p>
+    </section>
+
+    <!-- Compétences rangées par couche : profile-stack.js gère la sélection et l'assemblage.
+         Sans script, la première couche reste affichée et les autres se lisent en liste. -->
+    <section class="stack-section" aria-labelledby="stack-title">
+        <div class="stack-intro">
+            <h2 id="stack-title" class="section-title">Du câble au service.</h2>
+            <p>Ce que j’ai appris en formation et sur mes projets, couche par couche.</p>
+        </div>
+
+        <div class="stack">
+            <div class="stack-layers" role="tablist" aria-label="Couches" aria-orientation="vertical">
+                <button class="stack-layer" type="button" role="tab" id="layer-tab-5" aria-controls="layer-5" aria-selected="false" tabindex="-1" style="--i:4">
+                    <span class="stack-number">05</span><span class="stack-name">Services</span>
+                </button>
+                <button class="stack-layer" type="button" role="tab" id="layer-tab-4" aria-controls="layer-4" aria-selected="false" tabindex="-1" style="--i:3">
+                    <span class="stack-number">04</span><span class="stack-name">Virtualisation</span>
+                </button>
+                <button class="stack-layer" type="button" role="tab" id="layer-tab-3" aria-controls="layer-3" aria-selected="false" tabindex="-1" style="--i:2">
+                    <span class="stack-number">03</span><span class="stack-name">Système</span>
+                </button>
+                <button class="stack-layer" type="button" role="tab" id="layer-tab-2" aria-controls="layer-2" aria-selected="false" tabindex="-1" style="--i:1">
+                    <span class="stack-number">02</span><span class="stack-name">Réseau</span>
+                </button>
+                <button class="stack-layer" type="button" role="tab" id="layer-tab-1" aria-controls="layer-1" aria-selected="true" tabindex="0" style="--i:0">
+                    <span class="stack-number">01</span><span class="stack-name">Physique et liaison</span>
+                </button>
+            </div>
+
+            <div class="stack-panels">
+                <div class="stack-panel" role="tabpanel" id="layer-5" aria-labelledby="layer-tab-5" hidden>
+                    <p class="stack-panel-number" aria-hidden="true">05</p>
+                    <h3>Services</h3>
+                    <p>Les applications que les utilisateurs voient : stockage de fichiers, domotique et services réseau.</p>
+                    <ul class="stack-tags"><li>Nextcloud</li><li>Home Assistant</li><li>Services réseau</li></ul>
+                </div>
+                <div class="stack-panel" role="tabpanel" id="layer-4" aria-labelledby="layer-tab-4" hidden>
+                    <p class="stack-panel-number" aria-hidden="true">04</p>
+                    <h3>Virtualisation</h3>
+                    <p>Faire tourner plusieurs environnements isolés sur une même machine, en VM ou en conteneurs.</p>
+                    <ul class="stack-tags"><li>Proxmox VE</li><li>Docker</li><li>Machines virtuelles</li></ul>
+                </div>
+                <div class="stack-panel" role="tabpanel" id="layer-3" aria-labelledby="layer-tab-3" hidden>
+                    <p class="stack-panel-number" aria-hidden="true">03</p>
+                    <h3>Système</h3>
+                    <p>Installer, administrer et maintenir des serveurs Linux.</p>
+                    <ul class="stack-tags"><li>Linux</li><li>Debian</li><li>Administration système</li></ul>
+                </div>
+                <div class="stack-panel" role="tabpanel" id="layer-2" aria-labelledby="layer-tab-2" hidden>
+                    <p class="stack-panel-number" aria-hidden="true">02</p>
+                    <h3>Réseau</h3>
+                    <p>Adresser et router le trafic, en IPv4 comme en IPv6, et relier des réseaux distants par VPN.</p>
+                    <ul class="stack-tags"><li>IPv4</li><li>IPv6</li><li>Routeurs</li><li>WireGuard</li></ul>
+                </div>
+                <div class="stack-panel" role="tabpanel" id="layer-1" aria-labelledby="layer-tab-1">
+                    <p class="stack-panel-number" aria-hidden="true">01</p>
+                    <h3>Physique et liaison</h3>
+                    <p>Relier les équipements et configurer les switches, d’abord en simulation puis sur du vrai matériel.</p>
+                    <ul class="stack-tags"><li>Switches</li><li>Cisco Packet Tracer</li></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projets concrets : les services auto-hébergés, avec les boutons de l'accueil. -->
+    <section class="live-section" aria-labelledby="live-title">
+        <h2 id="live-title" class="section-title">En ligne sur attenna.net.</h2>
+        <p>Mes projets personnels tournent ici, auto-hébergés sur une infrastructure Proxmox.</p>
+        <div class="live-buttons">
+            <a href="https://pve.attenna.net" target="_blank" rel="noopener noreferrer">
+                <span class="service-button orange">
+                    <span class="button-icon button-icon-in" aria-hidden="true">
+                        <svg viewBox="0 0 64 48"><path d="M4 4h11l17 20-17 20H4l17-20zM60 4H49L32 24l17 20h11L43 24z"></path></svg>
+                    </span>
+                    <span class="button-label">PVE</span>
+                    <span class="button-icon button-icon-out" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+                    </span>
+                </span>
+            </a>
+            <a href="https://cloud.attenna.net" target="_blank" rel="noopener noreferrer">
+                <span class="service-button gray">
+                    <span class="button-icon button-icon-in" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M7.2 18.5h10.2a4.1 4.1 0 0 0 .5-8.2A6 6 0 0 0 6.5 9a4.8 4.8 0 0 0 .7 9.5Z"></path></svg>
+                    </span>
+                    <span class="button-label">Cloud</span>
+                    <span class="button-icon button-icon-out" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+                    </span>
+                </span>
+            </a>
+            <a href="https://maison.attenna.net" target="_blank" rel="noopener noreferrer" aria-label="Home Assistant">
+                <span class="service-button home-assistant">
+                    <span class="button-icon button-icon-in" aria-hidden="true">
+                        <img src="data:image/svg+xml,%3csvg%20width='240'%20height='240'%20viewBox='0%200%20240%20240'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M229.39%20109.153L130.61%2010.3725C124.78%204.5425%20115.23%204.5425%20109.4%2010.3725L10.61%20109.153C4.78%20114.983%200%20126.512%200%20134.762V224.762C0%20233.012%206.75%20239.762%2015%20239.762H107.27L66.64%20199.132C64.55%20199.852%2062.32%20200.262%2060%20200.262C48.7%20200.262%2039.5%20191.062%2039.5%20179.762C39.5%20168.462%2048.7%20159.262%2060%20159.262C71.3%20159.262%2080.5%20168.462%2080.5%20179.762C80.5%20182.092%2080.09%20184.322%2079.37%20186.412L111%20218.042V102.162C104.2%2098.8225%2099.5%2091.8425%2099.5%2083.7725C99.5%2072.4725%20108.7%2063.2725%20120%2063.2725C131.3%2063.2725%20140.5%2072.4725%20140.5%2083.7725C140.5%2091.8425%20135.8%2098.8225%20129%20102.162V183.432L160.46%20151.972C159.84%20150.012%20159.5%20147.932%20159.5%20145.772C159.5%20134.472%20168.7%20125.272%20180%20125.272C191.3%20125.272%20200.5%20134.472%20200.5%20145.772C200.5%20157.072%20191.3%20166.272%20180%20166.272C177.5%20166.272%20175.12%20165.802%20172.91%20164.982L129%20208.892V239.772H225C233.25%20239.772%20240%20233.022%20240%20224.772V134.772C240%20126.522%20235.23%20115.002%20229.39%20109.162V109.153Z'%20fill='%23F2F4F9'/%3e%3c/svg%3e" alt="">
+                    </span>
+                    <span class="button-label home-assistant-label" aria-hidden="true">
+                        <span class="home-assistant-label-short">Home Assist.</span>
+                        <span class="home-assistant-label-full">Home Assistant</span>
+                    </span>
+                    <span class="button-icon button-icon-out" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+                    </span>
+                </span>
+            </a>
+            <a href="../wg.html">
+                <span class="service-button white">
+                    <span class="button-icon button-icon-in" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+                    </span>
+                    <span class="button-label">VPN</span>
+                    <span class="button-icon button-icon-out" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+                    </span>
+                </span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Portrait et suite de la biographie. -->
+    <section class="profile-outro" aria-labelledby="outro-title">
+        <figure class="profile-portrait">
+            <img src="../assets/Matthieu-BJekcFYR.gif" alt="Avatar animé de Matthieu Leconte" width="480" height="480">
+        </figure>
+        <div class="profile-outro-text">
+            <h2 id="outro-title" class="section-title">Au-delà des cours.</h2>
+            <p>
+                En parallèle de mes études, je m’investis dans des projets personnels orientés cloud, auto-hébergement
+                et open-source, ce qui me permet de renforcer mon autonomie, ma rigueur et ma capacité à résoudre des
+                problèmes techniques.
+            </p>
+            <p>
+                J’accorde également de l’importance à la documentation, à l’organisation du travail et à la compréhension
+                globale d’un projet, de l’analyse du besoin jusqu’à la mise en œuvre.
+            </p>
+            <p>
+                Curieux, motivé et sérieux, je cherche constamment à approfondir mes connaissances pour évoluer vers les
+                métiers des réseaux, systèmes et infrastructures informatiques.
+            </p>
+            <a class="text-link" href="https://github.com/matthieuleconte1" target="_blank" rel="noopener noreferrer">
+                Voir mon GitHub
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+            </a>
+        </div>
+    </section>
+</main>
+
+<!-- Contrôles de défilement gérés par scroll-arrows.js. -->
+<span class="scroll-hint" aria-hidden="true">↓</span>
+<a href="#top" class="scroll-top-link is-hidden" aria-label="Revenir en haut">↑</a>
+</body>
+</html>
