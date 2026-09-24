@@ -1,8 +1,11 @@
 <div align="center">
 
-<img src="pictures/favicon-192.png" width="96" alt="Logo Attenna">
-
-# Attenna.net
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="pictures/readme/logo-dark.png">
+    <img src="pictures/readme/logo-light.png" width="320" alt="Attenna.net">
+  </picture>
+</h1>
 
 **Le portail de mon infrastructure auto-hébergée, sur un océan simulé en temps réel sur le GPU.**
 
