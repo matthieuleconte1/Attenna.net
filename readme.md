@@ -73,7 +73,7 @@ scripts/                              Favicons et déploiement serveur
 | --- | --- |
 | Services surveillés et intervalle des contrôles | `monitoredServices` et `checkInterval` dans `JS/service-status.js` |
 | Vent, vagues, caméra, bloom et réaction au défilement | `OCEAN_TUNING` dans `fft-ocean/tuning.ts` |
-| Favicons | `python3 scripts/build-favicon.py` (nécessite Pillow) |
+| Favicons | `python3 scripts/build-favicon.py` (nécessite Pillow, NumPy et SciPy) |
 
 ---
 
