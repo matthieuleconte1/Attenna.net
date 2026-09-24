@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/button-refresh.css">
+    <link rel="stylesheet" href="CSS/service-status.css">
     <meta name="description" content="Service d'hébergement et cloud privé open-source basé sur Proxmox et Nextcloud.">
     <title>Attenna Cloud et Hosting</title>
     <link rel="icon" href="pictures/favicon.ico" sizes="any">
@@ -126,32 +127,34 @@
     </a>
 </div>
 
-<!-- Panneau enrichi par service-status.js pour afficher l'état des services. -->
-<div class="status-monitor" data-state="checking">
+<!-- Moniteur de services : service-status.js le révèle, construit les lignes et suit les états. -->
+<div class="status-monitor" data-state="checking" hidden>
     <button class="status-trigger" type="button" aria-expanded="false" aria-controls="service-status-panel">
-        <span class="status-dot" aria-hidden="true"></span>
-        <span id="service-status-label" aria-live="polite">Vérification des services…</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>
+        <span class="status-pulse" aria-hidden="true"></span>
+        <span id="service-status-label" aria-live="polite">Vérification…</span>
+        <svg class="status-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>
     </button>
 
     <div class="service-status-panel" id="service-status-panel">
         <div class="status-panel-head">
-            <p>État des services</p>
-            <span>Mise à jour automatique</span>
+            <div>
+                <div class="status-total-line">
+                    <p class="status-total"><b class="status-count">–</b><span>/<i class="status-size">–</i></span></p>
+                    <span class="status-pulse status-pulse-large" aria-hidden="true"></span>
+                </div>
+                <p class="status-summary">Vérification en cours</p>
+            </div>
+            <button class="status-refresh" type="button" aria-label="Relancer la vérification">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"></path><path d="M4 4v4h4"></path><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"></path><path d="M20 20v-4h-4"></path></svg>
+            </button>
         </div>
-        <ul>
-            <li data-service-row="pve"><i></i><a href="https://pve.attenna.net" target="_blank">PVE</a><strong>Vérification…</strong></li>
-            <li data-service-row="cloud"><i></i><a href="https://cloud.attenna.net" target="_blank">Cloud</a><strong>Vérification…</strong></li>
-            <li data-service-row="pve2"><i></i><a href="https://pve2.attenna.net" target="_blank">Mini PVE</a><strong>Vérification…</strong></li>
-            <li data-service-row="vault"><i></i><a href="https://vault.attenna.net/#/login" target="_blank">Vault</a><strong>Vérification…</strong></li>
-            <li data-service-row="wireguard"><i></i><a href="https://wg.attenna.net" target="_blank">WireGuard</a><strong>Vérification…</strong></li>
-            <li data-service-row="home-assistant"><i></i><a href="https://maison.attenna.net" target="_blank" rel="noopener noreferrer">Home Assistant</a><strong>Vérification…</strong></li>
-        </ul>
-        <p class="status-note">Test effectué depuis votre navigateur</p>
+        <p class="status-updated" aria-live="off">Premier contrôle…</p>
+        <ul class="status-list"></ul>
+        <p class="status-note">Testé depuis votre navigateur, toutes les 60 secondes.</p>
     </div>
 </div>
 <!-- Chargé après le HTML afin que les éléments du moniteur soient disponibles. -->
-<script type="module" src="JS/service-status.js?v=3"></script>
+<script type="module" src="JS/service-status.js"></script>
 <script type="module" src="JS/fft-ocean.ts"></script>
 </body>
 </html>

@@ -6,7 +6,8 @@
 }
 
 /*
- * Composants complémentaires de l'accueil : boutons d'accès et moniteur de services.
+ * Composants complémentaires de l'accueil : boutons d'accès (le moniteur de services
+ * a sa propre feuille, service-status.css).
  * Ce fichier ne structure pas la page ; il affine les interactions de ces composants.
  */
 /* Flat, solid-color buttons inspired by Alcove's simple call-to-action style. */
@@ -224,206 +225,6 @@
     display: none;
 }
 
-/* Service checker, added without changing the original page structure. */
-/* Bloc d'état piloté par service-status.js. */
-.status-monitor {
-    position: relative;
-    z-index: 30;
-    width: fit-content;
-    margin: 22px auto 0;
-}
-
-.status-trigger {
-    display: inline-flex;
-    width: auto;
-    min-width: 0;
-    height: 36px;
-    padding: 0 4px;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border: 0;
-    border-radius: 0;
-    color: #a7a7aa;
-    background: transparent;
-    box-shadow: none;
-    cursor: pointer;
-    font: 500 12px/1 "Red Hat Display", sans-serif;
-    letter-spacing: 0;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    transition: color 180ms ease;
-}
-
-.status-trigger::before,
-.status-trigger::after {
-    display: none;
-}
-
-.status-trigger:hover,
-.status-trigger:focus-visible {
-    color: #fff;
-    background: transparent;
-    box-shadow: none;
-    filter: none;
-    transform: none;
-}
-
-.status-trigger svg {
-    position: static;
-    width: 12px;
-    height: 12px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.75;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    opacity: 0.55;
-    transition: rotate 300ms var(--micro-ease);
-}
-
-.status-monitor.is-open .status-trigger svg {
-    rotate: 180deg;
-}
-
-.status-dot {
-    width: 6px;
-    height: 6px;
-    flex: 0 0 6px;
-    border-radius: 50%;
-    background: var(--status-amber);
-    box-shadow: none;
-}
-
-.status-monitor[data-state="online"] .status-dot {
-    background: var(--status-green);
-    box-shadow: none;
-}
-
-.status-monitor[data-state="offline"] .status-dot {
-    background: var(--status-red);
-    box-shadow: none;
-}
-
-/* Panneau déroulant et styles de chaque service sondé. */
-.service-status-panel {
-    position: absolute;
-    top: calc(100% + 11px);
-    left: 50%;
-    width: 290px;
-    padding: 17px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 18px;
-    color: #d4d4d6;
-    background: rgba(20, 20, 22, 0.91);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.46);
-    opacity: 0;
-    pointer-events: none;
-    translate: -50% -7px;
-    scale: 0.98;
-    transform-origin: top center;
-    backdrop-filter: blur(22px) saturate(130%);
-    -webkit-backdrop-filter: blur(22px) saturate(130%);
-    transition: opacity 200ms ease, translate 280ms var(--micro-ease), scale 280ms var(--micro-ease);
-}
-
-.status-monitor.is-open .service-status-panel,
-.status-monitor:focus-within .service-status-panel {
-    opacity: 1;
-    pointer-events: auto;
-    translate: -50% 0;
-    scale: 1;
-}
-
-.status-panel-head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-    padding-bottom: 13px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-    text-align: left;
-}
-
-.status-panel-head p,
-.status-panel-head span,
-.status-note {
-    margin: 0;
-}
-
-.status-panel-head p {
-    color: #f3f3f4;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.status-panel-head span {
-    color: #707074;
-    font-size: 9px;
-}
-
-.service-status-panel ul {
-    display: grid;
-    gap: 10px;
-    margin: 14px 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.service-status-panel li {
-    display: grid;
-    grid-template-columns: 7px 1fr auto;
-    align-items: center;
-    gap: 9px;
-    font-size: 11px;
-}
-
-.service-status-panel li i {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--status-amber);
-}
-
-.service-status-panel li[data-state="online"] i {
-    background: var(--status-green);
-    box-shadow: 0 0 8px rgba(120, 221, 139, 0.35);
-}
-
-.service-status-panel li[data-state="offline"] i {
-    background: var(--status-red);
-}
-
-.service-status-panel li a {
-    width: fit-content;
-    color: #c5c5c8;
-    text-decoration: none;
-}
-
-.service-status-panel li a:hover {
-    color: #fff;
-}
-
-.service-status-panel li strong {
-    color: #6e6e72;
-    font-weight: 600;
-}
-
-.service-status-panel li[data-state="online"] strong {
-    color: #8fc79a;
-}
-
-.service-status-panel li[data-state="offline"] strong {
-    color: #cf7976;
-}
-
-.status-note {
-    margin-top: 13px;
-    color: #69696d;
-    font-size: 9px;
-    text-align: left;
-}
-
 /* Adaptation du panneau aux écrans étroits. */
 @media (max-width: 768px) {
     .service-button,
@@ -490,22 +291,12 @@
         filter: none;
     }
 
-    .status-monitor {
-        margin-top: 18px;
-    }
-
-    .service-status-panel {
-        width: min(290px, calc(100vw - 28px));
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .button-icon,
     .button-label,
-    .service-button,
-    .service-status-panel,
-    .status-trigger,
-    .status-trigger svg {
+    .service-button {
         transition-duration: 0.01ms !important;
     }
 }

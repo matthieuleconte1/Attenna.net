@@ -1,125 +1,216 @@
 /*
- * Couche de finition commune aux pages secondaires (À propos, profil, WireGuard, horloge).
- * Elle est chargée après les feuilles spécifiques : ses sélecteurs qualifiés harmonisent
- * couleurs, fond, composants et accessibilité sans modifier le HTML.
+ * Feuille unique des pages secondaires (À propos, profil, WireGuard, horloge).
+ * Elle reprend la direction artistique de l'accueil : fond #080604, océan animé,
+ * titres Zalando Sans Expanded, surfaces vitrées et boutons de button-refresh.css.
  */
 :root {
-    --site-bg: #171717;
-    --site-surface: #242424;
-    --site-surface-soft: #2d2d2d;
-    --site-border: rgba(255, 255, 255, 0.1);
-    --site-text: #f4f4f4;
-    --site-muted: #949494;
+    --site-bg: #080604;
+    --site-text: #ffffff;
+    --site-muted: #909090;
+    --site-body: #c9c7c4;
     --site-accent: #ed6a0c;
     --site-accent-hover: #ff8126;
+    --site-surface: #121212;
+    --site-surface-raised: #1a1a1a;
+    --site-glass-strong: rgba(20, 20, 22, 0.91);
+    --site-border: rgba(255, 255, 255, 0.12);
+    --site-border-hover: rgba(255, 255, 255, 0.24);
+    --site-radius: 24px;
     --site-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --site-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
-/* Variables globales et socle de rendu. */
+/* Socle : mêmes fond et typographie que l'accueil, mais la page défile. */
 html {
-    display: block;
     min-height: 100%;
-    height: auto;
     background: var(--site-bg);
+    scroll-behavior: smooth;
 }
 
-/* Cadre partagé : palette sombre, typographie et fond en couches. */
 body.site-page {
     position: relative;
-    display: block;
-    isolation: isolate;
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
-    height: auto;
+    min-height: 100dvh;
     margin: 0;
     overflow-x: hidden;
+    isolation: isolate;
     color: var(--site-text);
-    background: var(--site-bg);
+    background-color: var(--site-bg);
     font-family: "Red Hat Display", sans-serif;
+    font-size: 18px;
 }
 
-.about-page {
-    animation: aboutBackgroundTone 2s ease-in-out forwards;
+.site-page img,
+.site-page video {
+    max-width: 100%;
+    height: auto;
 }
 
-.profile-page {
-    background-color: #171717;
-    animation: none;
-}
-
-body.site-page::after {
-    content: "";
+/* Océan WebGPU : celui de l'accueil, fixé derrière le contenu et piloté par le défilement. */
+.ocean-background {
     position: fixed;
-    right: -34vmax;
-    bottom: -48vmax;
-    left: auto;
-    width: 82vmax;
-    height: 82vmax;
-    background: url("../pictures/blob.svg") center / contain no-repeat;
-    opacity: 0.55;
-    filter: none;
-    transform: none;
-    animation: unifiedBlob 9s ease-in-out infinite alternate;
-    pointer-events: none;
+    inset: 0;
     z-index: -1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    touch-action: none;
+    /* --ocean-rise (0 → 1, publié par le suivi du défilement) fait monter l'océan vers le bas de la page. */
+    transform: translateY(calc(10vh - var(--ocean-rise, 0) * 14vh));
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 34%,
+        rgba(0, 0, 0, 0.08) 45%,
+        rgba(0, 0, 0, 0.62) 68%,
+        #000000 86%,
+        #000000 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 34%,
+        rgba(0, 0, 0, 0.08) 45%,
+        rgba(0, 0, 0, 0.62) 68%,
+        #000000 86%,
+        #000000 100%
+    );
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
 }
 
-/* En-tête commun et indicateurs de focus clavier. */
+/* En-tête : copie conforme de celui de l'accueil. */
 .site-page header {
     position: relative;
-    top: auto;
-    left: auto;
     z-index: 10;
-    width: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0;
     padding: 10px 20px;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    transform: none;
 }
 
-.site-page header:hover {
-    background: transparent;
-}
-
-.site-page .header-left,
-.site-page .header-right {
+.site-page .header-left {
     display: flex;
-    align-items: center;
 }
 
 .site-page .header-right {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .site-page #icon {
     display: block;
-    width: min(500px, 54vw);
+    width: 500px;
     height: auto;
-    margin: 0;
+    margin-right: 15px;
 }
 
-.site-page #github-logo,
-.site-page #logo-Github {
+.site-page #github-logo {
+    display: block;
     width: 50px;
     height: auto;
-    margin: 0 30px 0 0;
+    margin-right: 30px;
     border-radius: 999px;
-    opacity: 0.86;
-    box-shadow: none;
-    transition: opacity 180ms ease, transform 240ms var(--site-ease);
+    transition: box-shadow 0.35s ease;
 }
 
-.site-page #github-logo:hover,
-.site-page #logo-Github:hover {
-    opacity: 1;
-    box-shadow: none;
-    transform: translateY(-2px);
+.site-page #github-logo:hover {
+    box-shadow: 0 0 18px rgba(255, 255, 255, 0.8);
+}
+
+/* Bouton WireGuard : les morceaux du pictogramme se séparent à l'interaction. */
+.vpn-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-right: 20px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: filter 0.3s ease, transform 0.25s ease;
+}
+
+.vpn-circle svg {
+    width: 46px;
+    height: 46px;
+    fill: none;
+}
+
+.vpn-icon-plug {
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.vpn-circle:hover .vpn-icon-upper,
+.vpn-circle[aria-current="page"] .vpn-icon-upper {
+    transform: translate(-2px, 2px);
+}
+
+.vpn-circle:hover .vpn-icon-lower,
+.vpn-circle[aria-current="page"] .vpn-icon-lower {
+    transform: translate(2px, -2px);
+}
+
+.vpn-circle:hover .vpn-icon-leg,
+.vpn-circle[aria-current="page"] .vpn-icon-leg {
+    opacity: 0;
+}
+
+.vpn-circle:hover,
+.vpn-circle[aria-current="page"] {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.75));
+}
+
+/* Avatar : bascule entre l'image fixe et le GIF au survol. */
+.circle {
+    position: relative;
+    display: block;
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+    overflow: hidden;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 0 rgba(162, 91, 255, 0);
+    transition: box-shadow 0.35s ease;
+}
+
+.circle img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.circle .avatar {
+    z-index: 2;
+    background: white;
+    transition: opacity 0.5s ease;
+}
+
+.circle .gif {
+    z-index: 1;
+}
+
+.circle:hover .avatar,
+[aria-current="page"] > .circle .avatar {
+    opacity: 0;
+}
+
+.circle:hover,
+[aria-current="page"] > .circle {
+    box-shadow: 0 0 18px rgba(162, 91, 255, 0.75);
 }
 
 .site-page a:focus-visible,
@@ -128,583 +219,1243 @@ body.site-page::after {
     outline-offset: 4px;
 }
 
-/* À propos : panneaux d'information, hiérarchie de texte et liste de services. */
-.about-page .panel-container {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+/* Zone principale et accroche : même hiérarchie que les titres de l'accueil. */
+.page-main {
+    box-sizing: border-box;
+    flex: 1;
     width: min(1120px, calc(100% - 48px));
-    margin: 54px auto 0;
-    gap: 20px;
+    margin: 0 auto;
+    padding: clamp(24px, 5vh, 64px) 0 clamp(72px, 12vh, 140px);
 }
 
-.about-page .panel-container + .panel-container {
-    grid-template-columns: 1fr;
-    margin-top: 20px;
-    margin-bottom: 80px;
+.page-hero {
+    margin-bottom: clamp(32px, 6vh, 64px);
+    text-align: center;
 }
 
-.about-page .panel-one,
-.about-page .panel-two,
-.about-page .panel-three {
-    padding: clamp(28px, 4vw, 48px);
+.page-hero h1,
+.page-subtitle {
+    margin: 0;
+    font-family: "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    animation: headingWeightIntro 1.2s ease-out backwards;
+    transition: font-weight 0.95s ease;
+}
+
+.page-hero h1 {
+    color: #ffffff;
+    font-size: clamp(34px, 5.6vw, 84px);
+    line-height: 1.08;
+}
+
+.page-subtitle {
+    margin-top: 0.45em;
+    color: var(--site-muted);
+    font-size: clamp(20px, 2.8vw, 40px);
+    line-height: 1.2;
+    animation-delay: 0.45s;
+}
+
+.page-hero h1:hover,
+.page-subtitle:hover {
+    font-weight: 800;
+}
+
+.hero-muted {
+    color: var(--site-muted);
+}
+
+/* Apparition progressive des titres, par variation de graisse de police. */
+@keyframes headingWeightIntro {
+    from { font-weight: 800; }
+    to { font-weight: 500; }
+}
+
+/* Surface pleine partagée : aplat sombre, comme les boutons de l'accueil. */
+.surface-card {
+    position: relative;
+    box-sizing: border-box;
+    padding: clamp(26px, 3.6vw, 44px);
     border: 1px solid var(--site-border);
-    border-radius: 24px;
-    color: var(--site-text);
+    border-radius: var(--site-radius);
+    color: var(--site-body);
     background: var(--site-surface);
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    text-align: left;
+    animation: cardRise 0.8s var(--site-ease) backwards;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.about-page .panel-two {
-    background: var(--site-surface-soft);
+.surface-card:hover {
+    border-color: var(--site-border-hover);
 }
 
-.about-page h2,
-.about-page h3 {
-    margin: 0 0 20px;
-    text-align: left;
+.surface-card h2,
+.surface-card h3 {
+    margin: 0;
+    color: #ffffff;
     font-family: "Zalando Sans Expanded", "Red Hat Display", sans-serif;
     font-weight: 500;
-    letter-spacing: -0.045em;
-    line-height: 1.06;
+    line-height: 1.12;
 }
 
-.about-page h2 {
-    font-size: clamp(30px, 4vw, 54px);
+.surface-card h2 {
+    font-size: clamp(24px, 2.6vw, 36px);
 }
 
-.about-page h3 {
-    margin-top: 34px;
+.surface-card h3 {
+    margin-top: 30px;
     color: var(--site-muted);
-    font-size: clamp(21px, 2.4vw, 30px);
+    font-size: clamp(18px, 1.7vw, 23px);
 }
 
-.about-page p,
-.about-page ul {
-    margin: 0;
-    color: #c6c6c6;
-    font-size: clamp(16px, 1.45vw, 19px);
-    line-height: 1.65;
-}
-
-.about-page ul {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 34px;
-    padding-left: 22px;
-}
-
-.about-page .panel-three li {
-    margin-bottom: 16px;
-}
-
-.about-page strong {
-    color: #fff;
-}
-
-/* Profil : halo, composition du héros, portrait et biographie. */
-.profile-page::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    display: block;
-    background: rgba(0, 0, 0, 0.76);
-    mix-blend-mode: normal;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
-    backdrop-filter: blur(30px) saturate(135%);
-    -webkit-backdrop-filter: blur(30px) saturate(135%);
-    animation: profileGlassOpacity 2s ease-in-out forwards;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.profile-page::after {
-    right: -22vmax;
-    bottom: -38vmax;
-    width: 92vmax;
-    height: 92vmax;
-    opacity: 0.72;
-    filter: blur(26px);
-    z-index: 0;
-}
-
-.profile-page header,
-.profile-page .hero,
-.profile-page .back-to-top {
-    position: relative;
-    z-index: 2;
-}
-
-.profile-page .glow {
-    display: none;
-}
-
-.profile-page .hero {
-    box-sizing: border-box;
-    width: min(1120px, calc(100% - 48px));
-    min-height: 0;
-    margin: 70px auto 100px;
-    padding: 0;
-    gap: 28px;
-}
-
-.profile-page .hero-title {
-    width: 100%;
-    max-width: none;
-    margin: 0;
-    color: #fff;
-    font-family: "Zalando Sans Expanded", "Red Hat Display", sans-serif;
-    font-size: clamp(52px, 9vw, 126px);
-    font-weight: 500;
-    letter-spacing: -0.06em;
-    line-height: 0.95;
-    white-space: normal;
-}
-
-.profile-page .hero-title-outline {
-    color: var(--site-muted);
-    -webkit-text-stroke: 0;
-}
-
-.profile-page .profile-frame {
-    box-sizing: border-box;
-    width: 100%;
-    margin: 26px 0 0;
-    padding: 0;
-    align-self: auto;
-    justify-content: flex-end;
-    transition: none;
-}
-
-.profile-page .profile-frame:hover {
-    transform: none;
-}
-
-.profile-page .Profile img {
-    display: block;
-    width: clamp(240px, 32vw, 400px);
-    border-radius: 24px;
-}
-
-.profile-page .Margin-box {
-    padding: 0;
-}
-
-.profile-page .TextBlock {
-    box-sizing: border-box;
-    width: min(760px, 100%);
-    max-width: none;
-    padding: clamp(28px, 4vw, 48px);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 24px;
-    color: #c8c8c8;
-    background: rgba(10, 10, 10, 0.5);
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.05),
-        0 18px 42px rgba(0, 0, 0, 0.34);
-    font-family: "Red Hat Display", sans-serif;
-    font-size: clamp(16px, 1.5vw, 19px);
+.surface-card p,
+.surface-card ul {
+    margin: 16px 0 0;
+    font-size: clamp(16px, 1.3vw, 18px);
     line-height: 1.7;
-    backdrop-filter: blur(24px) saturate(135%);
-    -webkit-backdrop-filter: blur(24px) saturate(135%);
-    transition: none;
 }
 
-.profile-page .TextBlock:hover {
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.07),
-        0 20px 46px rgba(0, 0, 0, 0.38);
-}
-
-/* WireGuard : composition volontairement sobre et sans décor animé. */
-.wg-page {
-    overflow: hidden;
-    background:
-        radial-gradient(circle at 50% 44%, rgba(255, 255, 255, 0.045), transparent 34%),
-        #111111;
-}
-
-body.site-page.wg-page::before,
-body.site-page.wg-page::after {
-    display: none;
-}
-
-.wg-page header,
-.wg-page .wg-center {
-    position: fixed;
-    z-index: 5;
-}
-
-.wg-page header {
-    top: 0;
-    right: 0;
-    left: 0;
-}
-
-.wg-neon-background,
-.wg-neon-background::before,
-.wg-neon-background::after {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-}
-
-.wg-neon-background {
-    z-index: 0;
-    overflow: hidden;
-    background:
-        radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.035), transparent 29%),
-        linear-gradient(145deg, rgba(255, 31, 122, 0.025), transparent 40%, rgba(40, 207, 255, 0.035));
-}
-
-.wg-neon-background::before {
-    content: "";
-    inset: -12%;
-    background:
-        conic-gradient(from 200deg at 50% 50%, transparent 0 18%, rgba(255, 27, 112, 0.2) 25%, transparent 34% 55%, rgba(60, 226, 255, 0.15) 63%, transparent 71%);
-    filter: blur(48px) saturate(125%);
-    opacity: 0.38;
-    transform: scale(1.04);
-}
-
-.wg-neon-background::after {
-    content: "";
-    inset: 0;
-    background: radial-gradient(ellipse at center, transparent 18%, rgba(2, 2, 4, 0.14) 48%, rgba(2, 2, 4, 0.86) 100%);
-    z-index: 4;
-}
-
-#wg-particle-field {
-    position: absolute;
-    inset: 50% auto auto 50%;
-    width: min(1040px, 96vmax);
-    height: min(1040px, 96vmax);
-    max-width: none;
-    transform: translate(-50%, -50%);
-    opacity: 1;
-    filter: contrast(125%) drop-shadow(0 0 14px rgba(134, 161, 255, 0.12));
-}
-
-.wg-aurora {
-    position: absolute;
-    inset: -12%;
-    z-index: 1;
-    background:
-        radial-gradient(ellipse at 26% 42%, rgba(255, 30, 104, 0.16), transparent 24%),
-        radial-gradient(ellipse at 72% 54%, rgba(47, 213, 255, 0.13), transparent 26%),
-        radial-gradient(ellipse at 50% 74%, rgba(124, 59, 255, 0.1), transparent 25%);
-    filter: blur(38px);
-    mix-blend-mode: screen;
-    transform: rotate(-5deg);
-}
-
-.wg-grid {
-    position: absolute;
-    inset: 48% -12% -38%;
-    z-index: 2;
-    opacity: 0.16;
-    background-image:
-        linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-    background-size: 76px 76px;
-    mask-image: linear-gradient(to bottom, transparent, #000 35%, transparent 92%);
-    transform: perspective(520px) rotateX(66deg) scale(1.35);
-    transform-origin: center top;
-}
-
-.wg-noise {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    opacity: 0.065;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
-}
-
-.wg-page .wg-center {
-    gap: 16px;
-    width: min(760px, calc(100% - 48px));
-}
-
-.wg-page .center-pill {
-    min-height: 66px;
-    padding: 0 70px 0 28px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 999px;
-    color: rgba(255, 255, 255, 0.9);
-    background: #191919;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
-}
-
-.wg-page .center-pill:hover {
-    border-color: rgba(255, 255, 255, 0.32);
-    background: #1d1d1d;
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.3);
-    transform: translateY(-1px);
-}
-
-.wg-page .copy-icon,
-.wg-page .copy-icon::before {
-    border-color: rgba(255, 255, 255, 0.66);
-}
-
-.wg-page .center-pill.copied .copy-icon {
-    border-color: #ffffff;
-}
-
-.wg-page .center-pill.copied .copy-icon::after {
-    border-left-color: #ffffff;
-    border-bottom-color: #ffffff;
-}
-
-.wg-page .terminal-button {
-    min-width: 170px;
-    min-height: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 999px;
-    color: rgba(255, 255, 255, 0.9);
-    background: transparent;
-    box-shadow: none;
-    font-family: "Red Hat Display", sans-serif;
+.surface-card strong {
+    color: #ffffff;
     font-weight: 700;
 }
 
-.wg-page .terminal-button:hover {
-    border-color: rgba(255, 255, 255, 0.28);
-    background: rgba(255, 255, 255, 0.04);
-    box-shadow: none;
-    transform: translateY(-1px);
-}
-
-@keyframes wgSpectrumOrbit {
-    to {
-        transform: translate3d(calc(var(--wg-pointer-x) * 2.4vw), calc(var(--wg-pointer-y) * 2.4vh), 0) rotate(360deg) scale(1.06);
-    }
-}
-
-@keyframes wgAuroraBreathe {
+@keyframes cardRise {
     from {
-        opacity: 0.58;
-        transform: translate3d(calc(var(--wg-pointer-x) * -3vw), calc(var(--wg-pointer-y) * -3vh), 0) rotate(-8deg) scale(0.94);
-    }
-    to {
-        opacity: 0.92;
-        transform: translate3d(calc(var(--wg-pointer-x) * -3vw), calc(var(--wg-pointer-y) * -3vh), 0) rotate(7deg) scale(1.08);
+        opacity: 0;
+        transform: translateY(18px);
     }
 }
 
-@keyframes wgGridTravel {
-    to {
-        background-position: 0 76px, 0 76px;
-    }
+/* Pastille d'icône des tuiles, reprise du gris des boutons de l'accueil. */
+.card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    color: #ffffff;
+    background: #3b3b3b;
 }
 
-@keyframes wgNoiseShift {
-    0% { transform: translate3d(-3%, 2%, 0); }
-    25% { transform: translate3d(2%, -4%, 0); }
-    50% { transform: translate3d(4%, 3%, 0); }
-    75% { transform: translate3d(-4%, -2%, 0); }
-    100% { transform: translate3d(1%, 4%, 0); }
+.card-icon svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-/* Horloge : terminal cohérent avec la palette WireGuard. */
-.clock-page {
-    color: #fff;
+/* À propos : sections aérées, séparées par de grands espaces plutôt que par des cartes. */
+.about-sections {
+    display: grid;
+    gap: clamp(80px, 14vh, 150px);
 }
 
-body.site-page.clock-page::before,
-body.site-page.clock-page::after {
+.eyebrow {
+    margin: 0 0 14px;
+    color: var(--site-accent);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.section-title {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+    font-size: clamp(30px, 3.6vw, 52px);
+    font-weight: 500;
+    line-height: 1.08;
+}
+
+.text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding-bottom: 6px;
+    color: #ffffff;
+    background:
+        linear-gradient(var(--site-accent), var(--site-accent)) left bottom / 0% 1px no-repeat,
+        linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)) left bottom / 100% 1px no-repeat;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-size 450ms var(--site-ease), color 300ms ease;
+}
+
+.text-link svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: translate 300ms var(--site-ease);
+}
+
+.text-link:hover {
+    color: var(--site-accent-hover);
+    background-size: 100% 1px, 100% 1px;
+}
+
+.text-link:hover svg {
+    translate: 3px -3px;
+}
+
+/* Récit épinglé : la scène reste à l'écran pendant que about-story.js fait défiler
+   quatre étapes. Sans la classe is-ready (pas de script, animations réduites), les
+   étapes s'empilent dans le flux et le canvas est masqué. */
+.story-visual,
+.story-meta {
     display: none;
 }
 
-.clock-page .terminal-window {
-    width: min(760px, 100%);
-    border: 1px solid var(--site-border);
-    border-radius: 24px;
-    background: var(--site-surface);
-    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.36);
+.story-steps {
+    display: grid;
+    gap: clamp(56px, 10vh, 96px);
 }
 
-.clock-page .terminal-topbar {
-    min-height: 44px;
-    padding: 0 18px;
-    border-bottom-color: var(--site-border);
-    background: rgba(255, 255, 255, 0.035);
+.story-step h2 {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+    font-size: clamp(32px, 3.6vw, 54px);
+    font-weight: 500;
+    line-height: 1.08;
 }
 
-.clock-page .window-dot {
-    width: 9px;
-    height: 9px;
+.story-step-vision h2 {
+    font-size: clamp(26px, 2.8vw, 42px);
+    line-height: 1.16;
+    text-wrap: balance;
+}
+
+.story-step em {
+    color: var(--site-accent);
+    font-style: normal;
+}
+
+.story-body {
+    max-width: 44ch;
+    margin: 20px 0 0;
+    color: var(--site-body);
+    font-size: clamp(17px, 1.4vw, 20px);
+    line-height: 1.65;
+}
+
+.story-body strong {
+    color: #ffffff;
+}
+
+.story.is-ready {
+    height: 420vh;
+}
+
+.story.is-ready .story-stage {
+    position: sticky;
+    top: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: center;
+    gap: clamp(24px, 4vw, 64px);
+    height: 100vh;
+    height: 100svh;
+}
+
+.story.is-ready .story-visual {
+    display: block;
+    height: min(78vh, 680px);
+}
+
+.story-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.story.is-ready .story-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    font: 600 14px var(--site-mono);
+}
+
+.story-count {
+    color: #ffffff;
+}
+
+.story-total {
+    color: #707074;
+}
+
+.story-progress {
+    display: flex;
+    gap: 6px;
+    margin-left: 10px;
+}
+
+.story-progress i {
+    position: relative;
+    width: 34px;
+    height: 2px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: #3b3b3b;
+}
+
+.story-progress i::after {
+    content: "";
+    position: absolute;
+    inset: 0;
     background: var(--site-accent);
+    transform: scaleX(var(--fill, 0));
+    transform-origin: left;
+}
+
+/* Mots découpés par splitText (anime.js) : insécables, pour que la césure tombe entre deux mots. */
+.story-step h2 [data-word]:not([data-char]),
+.page-hero h1 [data-word]:not([data-char]) {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Les étapes se superposent ; anime.js fait entrer et sortir leurs lettres et leurs mots. */
+.story.is-ready .story-steps {
+    display: grid;
+}
+
+.story.is-ready .story-step {
+    grid-area: 1 / 1;
+    align-self: center;
+    pointer-events: none;
+}
+
+.story.is-ready .story-step.is-active {
+    pointer-events: auto;
+}
+
+/* Mode léger (GPU modestes, visual-quality.js) : chaque étape du récit affiche une image
+   fixe du nuage de points, en fondu, et l'océan devient une image de fond. */
+.story-image {
+    display: none;
+}
+
+.story.is-ready .story-visual {
+    position: relative;
+}
+
+.story.is-lite .story-canvas {
+    display: none;
+}
+
+.story.is-lite .story-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transform: scale(0.96);
+    transition: opacity 600ms ease, transform 900ms var(--site-ease);
+}
+
+.story.is-lite .story-image.is-active {
+    opacity: 1;
+    transform: none;
+}
+
+.visuals-lite .ocean-background {
+    background: url("../pictures/about/ocean.webp") center / cover no-repeat;
+}
+
+/* Services : tuiles courtes avec halo qui suit le pointeur. */
+.section-head {
+    margin-bottom: clamp(28px, 5vh, 48px);
+    text-align: center;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.feature-tile {
+    position: relative;
+    overflow: hidden;
+    padding: 28px;
+    transition: transform 0.45s var(--site-ease), border-color 0.3s ease;
+}
+
+.feature-tile:hover {
+    transform: translateY(-4px);
+}
+
+.feature-tile > * {
+    position: relative;
+    z-index: 1;
+}
+
+.feature-tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgba(237, 106, 12, 0.16), transparent 65%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.feature-tile:hover::after {
     opacity: 1;
 }
 
-.clock-page .window-dot:nth-child(2) {
-    background: #777;
+.feature-tile .card-icon {
+    margin-bottom: 22px;
+    transition: transform 0.45s var(--site-ease), background-color 0.3s ease;
 }
 
-.clock-page .window-dot:nth-child(3) {
-    background: #aaa;
+.feature-tile:hover .card-icon {
+    background: var(--site-accent);
+    transform: translateY(-3px) rotate(-8deg);
 }
 
-.clock-page .terminal-line,
-.clock-page .muted {
-    color: var(--site-muted);
-}
-
-.clock-page .clock {
-    color: #fff;
-    text-shadow: none;
-}
-
-.clock-page .cursor {
-    color: var(--site-accent-hover);
-}
-
-.site-page .back-to-top {
-    right: 28px;
-    bottom: 28px;
-    width: 42px;
-    height: 42px;
-    border: 1px solid var(--site-border);
-    border-radius: 14px;
-    color: #fff;
-    background: var(--site-surface);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+.feature-tile h3 {
+    margin: 0;
+    color: #ffffff;
     font-size: 19px;
-    opacity: 1;
-    backdrop-filter: none;
 }
 
-.site-page .back-to-top:hover {
-    background: var(--site-surface-soft);
+.feature-tile p {
+    margin: 10px 0 0;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Public visé : pastilles révélées en cascade. */
+.audience {
+    text-align: center;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chips li {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border: 1px solid var(--site-border);
+    border-radius: 999px;
+    color: #ffffff;
+    background: #242424;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.chips li::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--site-accent);
+}
+
+/* Trame de points : prolonge l'océan de l'accueil ; dot-field.js la fait réagir
+   au pointeur et au clic. Elle s'efface là où l'océan apparaît. */
+.dot-field {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 88%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 48%, transparent 88%);
+}
+
+/* Services : les tuiles larges portent une teinte orange. */
+.feature-grid .tile-wide {
+    grid-column: span 2;
+    background: linear-gradient(135deg, rgba(237, 106, 12, 0.14), transparent 55%), var(--site-surface);
+}
+
+/* Révélation au défilement : activée par reveal.js, le contenu reste visible sans script. */
+.js-reveal .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    filter: blur(8px);
+    animation: none;
+    transition:
+        opacity 0.9s var(--site-ease),
+        transform 1s var(--site-ease),
+        filter 0.9s var(--site-ease),
+        border-color 0.3s ease;
+    transition-delay: calc(var(--delay, 0) * 80ms);
+}
+
+.js-reveal .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    filter: none;
+}
+
+/* Une fois l'apparition terminée (reveal.js), plus de décalage : le survol répond aussitôt. */
+.js-reveal .reveal.is-settled {
+    transition:
+        transform 0.45s var(--site-ease),
+        border-color 0.3s ease;
+    transition-delay: 0s;
+}
+
+.js-reveal .feature-tile.reveal.is-visible:hover {
+    transform: translateY(-4px);
+}
+
+.chips li {
+    transition: transform 0.45s var(--site-ease), border-color 0.3s ease;
+}
+
+.chips li:hover,
+.js-reveal .chips li.reveal.is-visible:hover {
+    border-color: rgba(237, 106, 12, 0.6);
     transform: translateY(-3px);
 }
 
-@keyframes unifiedBlob {
-    from { transform: rotate(-8deg) translate3d(-2vw, 1vh, 0); }
-    to { transform: rotate(8deg) translate3d(2vw, -1vh, 0); }
+/* Profil : accroche, pile de compétences couche par couche, services en ligne, portrait. */
+.profile-main > section + section {
+    margin-top: clamp(96px, 16vh, 170px);
 }
 
-@keyframes aboutBackgroundTone {
-    from { background-color: #171717; }
-    to { background-color: #0c0c0c; }
+.profile-lead {
+    max-width: 52ch;
+    margin: 32px auto 0;
+    color: var(--site-body);
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.6;
+    text-wrap: pretty;
 }
 
-@keyframes profileGlassOpacity {
-    from { opacity: 0.72; }
-    to { opacity: 1; }
+.stack-intro,
+.live-section {
+    text-align: center;
 }
 
-/* Mise en colonne et redimensionnement des composants sur mobile. */
-@media (max-width: 760px) {
+.stack-intro {
+    margin-bottom: clamp(40px, 7vh, 72px);
+}
+
+.stack-intro p,
+.live-section > p {
+    margin: 16px auto 0;
+    max-width: 48ch;
+    color: var(--site-muted);
+    font-size: 18px;
+    line-height: 1.55;
+}
+
+/* La pile : cinq couches, la plus large en bas comme une coupe de réseau.
+   La couche choisie prend l'orange et la hauteur des boutons de l'accueil. */
+.stack {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
+    gap: clamp(32px, 6vw, 88px);
+}
+
+.stack-layers {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.stack-layer {
+    --layer-bg: #242424;
+    --layer-dots: rgba(235, 240, 243, 0.12);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-sizing: border-box;
+    width: calc(100% - var(--i) * 6%);
+    height: 64px;
+    padding: 0 26px;
+    border: 1px solid var(--site-border);
+    border-radius: 18px;
+    color: #ffffff;
+    background:
+        radial-gradient(circle, var(--layer-dots) 1px, transparent 1.5px) 0 0 / 12px 12px,
+        var(--layer-bg);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        height 500ms var(--site-ease),
+        background-color 300ms ease,
+        border-color 300ms ease,
+        box-shadow 400ms ease,
+        transform 300ms var(--site-ease);
+}
+
+.stack-layer:hover {
+    border-color: var(--site-border-hover);
+    transform: translateY(-2px);
+}
+
+.stack-layer:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}
+
+.stack-layer[aria-selected="true"] {
+    --layer-bg: var(--site-accent);
+    --layer-dots: rgba(255, 255, 255, 0.28);
+    height: 88px;
+    border-color: var(--site-accent-hover);
+    box-shadow: 0 18px 44px rgba(237, 106, 12, 0.32);
+    transform: none;
+}
+
+.stack-number {
+    color: rgba(255, 255, 255, 0.5);
+    font: 600 14px "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+}
+
+.stack-layer[aria-selected="true"] .stack-number {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.stack-name {
+    font: 500 clamp(17px, 1.6vw, 22px) "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+}
+
+/* Assemblage à l'apparition : les couches tombent en place, de la base vers le sommet. */
+.stack.is-waiting .stack-layer {
+    opacity: 0;
+}
+
+.stack.is-built .stack-layer {
+    animation: layerDrop 800ms var(--site-ease) backwards;
+    animation-delay: calc(var(--i) * 110ms);
+}
+
+@keyframes layerDrop {
+    from {
+        opacity: 0;
+        transform: translateY(-48px);
+    }
+}
+
+.stack-panel-number {
+    margin: 0;
+    color: #3b3b3b;
+    font: 600 clamp(72px, 9vw, 132px) / 1 "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+}
+
+.stack-panel h3 {
+    margin: 12px 0 0;
+    color: #ffffff;
+    font: 500 clamp(26px, 2.6vw, 38px) / 1.1 "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+}
+
+.stack-panel > p:not(.stack-panel-number) {
+    max-width: 38ch;
+    margin: 16px 0 0;
+    color: var(--site-body);
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.stack-panel.is-entering {
+    animation: panelIn 450ms var(--site-ease);
+}
+
+@keyframes panelIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+.stack-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.stack-tags li {
+    padding: 8px 16px;
+    border: 1px solid var(--site-border);
+    border-radius: 999px;
+    color: #ffffff;
+    background: #1a1a1a;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* Services en ligne : les boutons de l'accueil, à l'identique. */
+.live-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.live-buttons a {
+    display: inline-flex;
+    border-radius: 24px;
+    text-decoration: none;
+}
+
+.live-buttons a:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}
+
+.site-page .live-buttons .service-button.white {
+    color: #111111;
+}
+
+.live-buttons a:focus-visible .service-button {
+    transform: translateY(-3px);
+    border-color: var(--button-border-hover);
+}
+
+.live-buttons a:focus-visible .button-icon-in {
+    opacity: 0;
+    translate: -100% -50%;
+}
+
+.live-buttons a:focus-visible .button-label {
+    translate: -30px 0;
+}
+
+.live-buttons a:focus-visible .button-icon-out {
+    opacity: 1;
+    filter: none;
+    scale: 1;
+    translate: 0 -50%;
+}
+
+/* Portrait et suite de la biographie. */
+.profile-outro {
+    display: grid;
+    grid-template-columns: minmax(200px, 320px) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(32px, 6vw, 88px);
+}
+
+.profile-portrait {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--site-border);
+    border-radius: var(--site-radius);
+}
+
+.site-page .profile-portrait img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.profile-outro-text p {
+    max-width: 60ch;
+    margin: 18px 0 0;
+    color: var(--site-body);
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.profile-outro-text .section-title {
+    margin-bottom: 8px;
+}
+
+/* WireGuard : commande copiable et accès à l'horloge, centrés dans l'écran. */
+.wg-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-pill {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-sizing: border-box;
+    width: min(780px, 100%);
+    min-height: 72px;
+    padding: 0 68px 0 28px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--site-radius);
+    color: rgba(255, 255, 255, 0.92);
+    background: var(--site-glass-strong);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.46);
+    backdrop-filter: blur(22px) saturate(130%);
+    -webkit-backdrop-filter: blur(22px) saturate(130%);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    animation: cardRise 0.8s var(--site-ease) 0.2s backwards;
+    transition:
+        border-color 300ms ease,
+        box-shadow 300ms ease,
+        transform 300ms var(--site-ease);
+}
+
+.center-pill:hover {
+    border-color: var(--site-border-hover);
+    box-shadow: 0 28px 64px rgba(0, 0, 0, 0.52);
+    transform: translateY(-3px);
+}
+
+.center-pill:active {
+    transform: translateY(0) scale(0.99);
+    transition-duration: 100ms;
+}
+
+.center-pill.copied {
+    border-color: rgba(120, 221, 139, 0.55);
+}
+
+.command-prompt {
+    color: var(--site-accent);
+    font-family: var(--site-mono);
+    font-size: clamp(14px, 2vw, 19px);
+    font-weight: 700;
+}
+
+.command-text {
+    min-width: 0;
+    overflow: hidden;
+    font-family: var(--site-mono);
+    font-size: clamp(13px, 2vw, 19px);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Icônes copier / copié : même fondu flouté que les icônes des boutons. */
+.copy-icon {
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    width: 22px;
+    height: 22px;
+    translate: 0 -50%;
+}
+
+.copy-icon svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: opacity 300ms ease, filter 300ms ease, scale 300ms var(--site-ease);
+}
+
+.copy-icon-done {
+    color: #78dd8b;
+    opacity: 0;
+    filter: blur(6px);
+    scale: 0.5;
+}
+
+.center-pill.copied .copy-icon-idle {
+    opacity: 0;
+    filter: blur(6px);
+    scale: 0.5;
+}
+
+.center-pill.copied .copy-icon-done {
+    opacity: 1;
+    filter: none;
+    scale: 1;
+}
+
+.wg-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 22px;
+    animation: cardRise 0.8s var(--site-ease) 0.3s backwards;
+}
+
+/* button-refresh.css style un <button> ; ici le bouton est un lien. */
+.site-page .service-button {
+    box-sizing: border-box;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* Horloge : fenêtre de terminal vitrée, chiffres dans la police des titres. */
+.clock-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min(820px, calc(100% - 48px));
+}
+
+.terminal-window {
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+}
+
+.terminal-topbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 0 18px;
+    border-bottom: 1px solid var(--site-border);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.terminal-title {
+    position: absolute;
+    left: 50%;
+    color: #707074;
+    font-family: var(--site-mono);
+    font-size: 12px;
+    translate: -50% 0;
+}
+
+.window-dot {
+    position: relative;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #3b3b3b;
+}
+
+.window-dot:first-child {
+    background: var(--site-accent);
+    cursor: pointer;
+    transition: background-color 200ms ease, transform 200ms var(--site-ease);
+}
+
+.window-dot:first-child:hover {
+    background: var(--site-accent-hover);
+    transform: scale(1.18);
+}
+
+.window-dot:first-child:hover::before,
+.window-dot:first-child:hover::after {
+    content: "";
+    position: absolute;
+    top: 5.5px;
+    left: 3px;
+    width: 6px;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.72);
+}
+
+.window-dot:first-child:hover::before {
+    transform: rotate(45deg);
+}
+
+.window-dot:first-child:hover::after {
+    transform: rotate(-45deg);
+}
+
+.window-dot:nth-child(3) {
+    background: #5e5e5e;
+}
+
+.terminal-content {
+    padding: clamp(26px, 6vw, 56px);
+}
+
+.terminal-line {
+    margin: 0;
+    color: var(--site-muted);
+    font-family: var(--site-mono);
+    font-size: clamp(13px, 1.8vw, 17px);
+    overflow-wrap: anywhere;
+}
+
+.terminal-prompt {
+    color: var(--site-accent);
+}
+
+.clock {
+    display: block;
+    margin: 22px 0 26px;
+    color: #ffffff;
+    font-family: "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+    font-size: clamp(44px, 11vw, 124px);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    animation: headingWeightIntro 1.2s ease-out backwards;
+    transition: font-weight 0.95s ease;
+}
+
+.clock:hover {
+    font-weight: 800;
+}
+
+.cursor {
+    color: var(--site-accent-hover);
+    animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* Contrôles de défilement pilotés par scroll-arrows.js, comme sur l'accueil. */
+.scroll-hint,
+.scroll-top-link {
+    position: fixed;
+    right: 34px;
+    bottom: 34px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 22px;
+    line-height: 1;
+    text-decoration: none;
+    transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.25s ease;
+}
+
+.scroll-hint {
+    pointer-events: none;
+    animation: scrollHint 1.35s ease-in-out infinite;
+}
+
+.scroll-top-link {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--site-glass-strong);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.36);
+    backdrop-filter: blur(22px) saturate(130%);
+    -webkit-backdrop-filter: blur(22px) saturate(130%);
+}
+
+.scroll-top-link:hover {
+    background: #242424;
+    transform: translateY(-3px);
+}
+
+.scroll-hint.is-hidden,
+.scroll-top-link.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+}
+
+@keyframes scrollHint {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+}
+
+/* Tablettes : les colonnes se resserrent avant de s'empiler. */
+@media (max-width: 1100px) {
+    .site-page #icon {
+        width: min(400px, 44vw);
+    }
+
+    .feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+/* Mobile : mêmes proportions que l'accueil sur petit écran. */
+@media (max-width: 768px) {
     .site-page header {
-        top: auto;
-        width: auto;
-        padding: 12px 16px;
-        flex-direction: row;
+        padding: 6px 16px;
+    }
+
+    .site-page .header-right {
+        gap: 12px;
     }
 
     .site-page #icon {
-        width: min(300px, 66vw);
+        width: min(52vw, 210px);
+        margin-right: 0;
     }
 
-    .site-page #github-logo,
-    .site-page #logo-Github {
-        display: block;
+    .site-page #github-logo {
+        display: none;
+    }
+
+    .vpn-circle {
+        width: 40px;
+        height: 40px;
+        margin-right: 0;
+    }
+
+    .vpn-circle svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .circle {
         width: 38px;
-        margin-right: 4px;
+        height: 38px;
+        margin-right: 0;
     }
 
-    .about-page .panel-container,
-    .about-page .panel-container + .panel-container {
+    .page-main,
+    .clock-layout {
+        width: calc(100% - 32px);
+    }
+
+    .page-hero h1 {
+        font-size: clamp(28px, 8vw, 40px);
+        line-height: 1.16;
+        text-wrap: balance;
+    }
+
+    .page-subtitle {
+        font-size: clamp(16px, 4.6vw, 22px);
+        line-height: 1.3;
+        text-wrap: balance;
+    }
+
+    .feature-grid {
         grid-template-columns: 1fr;
-        width: min(100% - 28px, 560px);
-        margin-top: 24px;
         gap: 14px;
     }
 
-    .about-page .panel-container + .panel-container {
-        margin-bottom: 70px;
+    .story.is-ready .story-stage {
+        grid-template-columns: 1fr;
+        grid-template-rows: 46svh auto;
+        align-content: center;
+        gap: 8px;
     }
 
-    .about-page ul {
+    .story.is-ready .story-visual {
+        height: 46svh;
+    }
+
+    .story.is-ready .story-meta {
+        margin-bottom: 16px;
+    }
+
+    .story-body {
+        margin-top: 14px;
+    }
+
+    .feature-grid .tile-wide {
+        grid-column: auto;
+    }
+
+    .stack,
+    .profile-outro {
         grid-template-columns: 1fr;
     }
 
-    .profile-page .hero {
-        width: min(100% - 28px, 620px);
-        margin: 44px auto 80px;
-        padding: 0;
+    .stack-layer {
+        width: calc(100% - var(--i) * 4%);
+        height: 56px;
+        padding: 0 20px;
     }
 
-    .profile-page .hero-title {
-        margin: 0;
+    .stack-layer[aria-selected="true"] {
+        height: 72px;
     }
 
-    .profile-page .profile-frame {
-        align-items: flex-end;
-        padding: 0;
+    .stack-panel-number {
+        font-size: 64px;
     }
 
-    .profile-page .Profile {
-        width: auto;
+    .profile-portrait {
+        width: min(100%, 260px);
+        justify-self: center;
     }
 
-    .profile-page .Profile img {
-        width: min(76vw, 340px);
-    }
-
-    .profile-page .TextBlock {
-        width: 100%;
-        padding: 26px;
-    }
-
-    .wg-page .wg-center {
-        width: calc(100% - 28px);
-    }
-
-    .wg-page .center-pill {
+    .center-pill {
         min-height: 62px;
         padding: 0 54px 0 18px;
         border-radius: 20px;
     }
 
-    .wg-page .command-text {
-        overflow: hidden;
-        text-overflow: ellipsis;
+    .copy-icon {
+        right: 18px;
     }
 
-    .clock-page .terminal-shell {
-        padding: 14px;
+    .terminal-title {
+        display: none;
     }
 
-    .clock-page .terminal-window {
-        border-radius: 20px;
+    .scroll-hint,
+    .scroll-top-link {
+        right: 20px;
+        bottom: 24px;
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
     }
 }
 
 /* Respecte la préférence utilisateur en supprimant les animations non essentielles. */
 @media (prefers-reduced-motion: reduce) {
-    body.site-page::after {
-        animation: none;
+    html {
+        scroll-behavior: auto;
     }
 
-    .about-page {
-        animation: none;
-        background-color: #171717;
-    }
-
-    .profile-page::before {
-        animation: none;
-        opacity: 1;
-    }
-
-    .wg-neon-background::before,
-    .wg-aurora,
-    .wg-grid,
-    .wg-noise {
+    .page-hero h1,
+    .page-subtitle,
+    .surface-card,
+    .center-pill,
+    .wg-actions,
+    .clock,
+    .cursor,
+    .scroll-hint,
+    .stack.is-built .stack-layer,
+    .stack-panel.is-entering {
         animation: none;
     }
 }

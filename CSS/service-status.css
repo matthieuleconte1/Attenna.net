@@ -1,0 +1,460 @@
+/*
+ * Moniteur de services de l'accueil : une pastille résume l'état, un panneau détaille
+ * chaque service (latence, historique des derniers contrôles). service-status.js
+ * construit les lignes et pilote les états via data-state.
+ */
+.status-monitor {
+    --status-surface: #121212;
+    --status-raised: #1a1a1a;
+    --status-line: rgba(255, 255, 255, 0.1);
+    --status-muted: #707074;
+    --status-color: var(--status-amber);
+    position: relative;
+    z-index: 30;
+    width: fit-content;
+    margin: 22px auto 0;
+    font-family: "Red Hat Display", sans-serif;
+}
+
+.status-monitor[hidden] {
+    display: none;
+}
+
+.status-monitor[data-state="online"] {
+    --status-color: var(--status-green);
+}
+
+.status-monitor[data-state="offline"] {
+    --status-color: var(--status-red);
+}
+
+/* style.css habille tous les <button> de l'accueil : on repart de zéro ici. */
+.status-monitor button {
+    all: unset;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.status-monitor button::before,
+.status-monitor button::after {
+    content: none;
+}
+
+.status-monitor button:focus-visible,
+.status-monitor a:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.78);
+    outline-offset: 3px;
+}
+
+/* Pastille : point d'état, un carré par service, résumé et chevron. */
+.status-monitor .status-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    height: 40px;
+    padding: 0 14px 0 16px;
+    border: 1px solid var(--status-line);
+    border-radius: 999px;
+    color: #c9c7c4;
+    background: var(--status-surface);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+    font-size: 13px;
+    font-weight: 600;
+    transition: border-color 300ms ease, color 300ms ease, transform 300ms var(--micro-ease);
+}
+
+.status-monitor .status-trigger:hover,
+.status-monitor.is-open .status-trigger {
+    border-color: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+}
+
+.status-monitor .status-trigger:active {
+    transform: scale(0.97);
+}
+
+/* Battement d'état : les six services sont les points d'un tracé de moniteur cardiaque.
+   En ligne, un point prend sa place dans le battement ; injoignable, il retombe sur la
+   ligne de base. service-status.js les place, anime.js fait courir le reflet. */
+.status-pulse {
+    display: inline-flex;
+    width: 46px;
+    height: 20px;
+}
+
+/* Dans la pastille, le battement accompagne le premier contrôle puis se replie : il ne
+   reste que le texte. */
+.status-trigger .status-pulse {
+    transition:
+        width 600ms var(--micro-ease),
+        margin 600ms var(--micro-ease),
+        opacity 350ms ease;
+}
+
+.status-monitor.is-settled .status-trigger .status-pulse {
+    width: 0;
+    margin-right: -12px;
+    opacity: 0;
+}
+
+/* Sans LED, seul le texte signale un problème, dans la couleur de l'état. */
+.status-monitor[data-state="degraded"] #service-status-label,
+.status-monitor[data-state="offline"] #service-status-label {
+    color: var(--status-color);
+}
+
+.status-pulse-large {
+    width: 96px;
+    height: 40px;
+}
+
+.status-pulse svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.pulse-line,
+.pulse-glow {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.pulse-line {
+    stroke: color-mix(in srgb, var(--status-color) 30%, #3b3b3b);
+    stroke-width: 1.2;
+    transition: stroke 600ms ease;
+}
+
+.pulse-glow {
+    stroke: var(--status-color);
+    stroke-width: 2;
+    stroke-dasharray: 0.3 1.4;
+    stroke-dashoffset: 0.3;
+    transition: stroke 600ms ease;
+}
+
+/* Couleur déclarée pour pouvoir glisser en douceur de l'ambre au vert (ou au rouge). */
+@property --dot-color {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #efb85c;
+}
+
+/* --flash (0 → 1, animé par anime.js) éclaircit le point au passage du reflet. */
+.pulse-dot {
+    --dot-color: var(--status-amber);
+    fill: color-mix(in srgb, #ffffff calc(var(--flash, 0) * 85%), var(--dot-color));
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: --dot-color 0.45s ease;
+}
+
+.pulse-dot[data-state="online"] {
+    --dot-color: var(--status-green);
+}
+
+.pulse-dot[data-state="offline"] {
+    --dot-color: var(--status-red);
+}
+
+.status-chevron {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.55;
+    transition: rotate 300ms var(--micro-ease);
+}
+
+.status-monitor.is-open .status-chevron {
+    rotate: 180deg;
+}
+
+/* Panneau : s'ouvre vers le bas, ou vers le haut quand la place manque (.opens-up). */
+.service-status-panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 50%;
+    box-sizing: border-box;
+    width: 384px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    padding: 20px;
+    border: 1px solid var(--status-line);
+    border-radius: 22px;
+    color: #c9c7c4;
+    background: var(--status-surface);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    translate: -50% -8px;
+    scale: 0.96;
+    transform-origin: top center;
+    transition:
+        opacity 220ms ease,
+        translate 360ms var(--micro-ease),
+        scale 360ms var(--micro-ease);
+}
+
+.status-monitor.opens-up .service-status-panel {
+    top: auto;
+    bottom: calc(100% + 12px);
+    translate: -50% 8px;
+    transform-origin: bottom center;
+}
+
+.status-monitor.is-open .service-status-panel {
+    opacity: 1;
+    pointer-events: auto;
+    translate: -50% 0;
+    scale: 1;
+}
+
+.status-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.status-total {
+    margin: 0;
+    color: #ffffff;
+    font-family: "Zalando Sans Expanded", "Red Hat Display", sans-serif;
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.status-total span {
+    color: var(--status-muted);
+}
+
+.status-total-line {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.status-total b,
+.status-total i {
+    font-style: normal;
+    font-weight: inherit;
+}
+
+.status-summary {
+    margin: 6px 0 0;
+    color: var(--status-color);
+    font-size: 13px;
+    font-weight: 700;
+    transition: color 400ms ease;
+}
+
+.status-monitor .status-refresh {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    color: #ffffff;
+    background: #242424;
+    transition: background-color 250ms ease;
+}
+
+.status-monitor .status-refresh:hover {
+    background: #3b3b3b;
+}
+
+.status-refresh svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.status-monitor.is-checking .status-refresh svg {
+    animation: statusSpin 0.9s linear infinite;
+}
+
+.status-updated {
+    margin: 14px 0 0;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--status-line);
+    color: var(--status-muted);
+    font: 500 11px "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+/* Lignes : point, nom et domaine, historique en barres, latence ; toute la ligne est un lien. */
+.status-list {
+    display: grid;
+    gap: 2px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.status-list a {
+    display: grid;
+    grid-template-columns: 8px minmax(0, 1fr) auto 52px;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 12px;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 200ms ease;
+}
+
+.status-list a:hover {
+    background: var(--status-raised);
+}
+
+.status-monitor.is-open .status-list li {
+    animation: statusRowIn 460ms var(--micro-ease) backwards;
+    animation-delay: calc(var(--i) * 45ms + 80ms);
+}
+
+.status-row-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--status-amber);
+    transition: background-color 0.45s ease, box-shadow 0.45s ease;
+}
+
+.status-list li[data-state="checking"] .status-row-dot {
+    animation: statusBlink 0.9s ease-in-out infinite alternate;
+}
+
+.status-list li[data-state="online"] .status-row-dot {
+    background: var(--status-green);
+    box-shadow: 0 0 10px rgba(120, 221, 139, 0.4);
+}
+
+.status-list li[data-state="offline"] .status-row-dot {
+    background: var(--status-red);
+}
+
+.status-name {
+    display: grid;
+    min-width: 0;
+}
+
+.status-name strong {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.status-name span {
+    overflow: hidden;
+    color: var(--status-muted);
+    font: 500 11px "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.status-history {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 18px;
+}
+
+.status-history i {
+    width: 4px;
+    height: 100%;
+    border-radius: 2px;
+    background: #242424;
+}
+
+.status-history i[data-state="online"] {
+    background: rgba(120, 221, 139, 0.75);
+}
+
+.status-history i[data-state="offline"] {
+    height: 60%;
+    background: var(--status-red);
+}
+
+.status-history i:last-child[data-state] {
+    animation: statusBarIn 500ms var(--micro-ease);
+}
+
+.status-latency {
+    color: #c9c7c4;
+    font: 600 12px "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.status-list li[data-state="offline"] .status-latency {
+    color: #cf7976;
+}
+
+.status-list li[data-state="checking"] .status-latency {
+    color: var(--status-muted);
+}
+
+.status-note {
+    margin: 12px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--status-line);
+    color: var(--status-muted);
+    font-size: 11px;
+}
+
+@keyframes statusBlink {
+    from { opacity: 0.35; }
+    to { opacity: 1; }
+}
+
+@keyframes statusSpin {
+    to { rotate: 360deg; }
+}
+
+@keyframes statusRowIn {
+    from { opacity: 0; translate: 0 8px; }
+}
+
+@keyframes statusBarIn {
+    from { transform: scaleY(0); }
+}
+
+@media (max-width: 768px) {
+    .status-monitor {
+        margin-top: 18px;
+    }
+
+    .service-status-panel {
+        width: min(384px, calc(100vw - 28px));
+        padding: 16px;
+    }
+
+    .status-list a {
+        grid-template-columns: 8px minmax(0, 1fr) auto 46px;
+        gap: 10px;
+    }
+
+    .status-history i:nth-child(-n + 4) {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .status-monitor *,
+    .status-monitor *::after {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+    }
+}

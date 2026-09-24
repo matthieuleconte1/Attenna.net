@@ -1,6 +1,34 @@
 import { createRenderer } from "../fft-ocean/renderer";
+import { createScrollMotion } from "../fft-ocean/scroll-motion";
 
 const canvas = document.querySelector<HTMLCanvasElement>("#fft-ocean-background");
+
+/**
+ * Largeur sur laquelle la houle est projetée. Sur un écran en portrait, étaler les
+ * colonnes sur la seule largeur visible tasserait points et vagues à l'horizontale :
+ * la scène garde donc au moins les proportions d'un écran paysage, et ses bords
+ * débordent simplement de l'écran.
+ */
+const MIN_SCENE_ASPECT = 1.5;
+
+/**
+ * Réglages du repli sur mobile. Une scène aussi large qu'en paysage n'y montrerait
+ * que son centre, avec de gros points : elle est moins élargie, les points et la
+ * houle sont plus fins, et le canvas suit la densité de l'écran pour rester net.
+ */
+const MOBILE_OCEAN = {
+  sceneAspect: 1.1,
+  pointScale: 0.68,
+  amplitudeScale: 0.85,
+  columnSpacing: 6.5,
+  maxPixelRatio: 2,
+};
+
+const isCompactViewport = () => window.matchMedia("(max-width: 768px)").matches;
+
+function sceneWidth(width: number, height: number, compact = false) {
+  return Math.max(width, height * (compact ? MOBILE_OCEAN.sceneAspect : MIN_SCENE_ASPECT));
+}
 
 function startParticleFallback(sourceCanvas: HTMLCanvasElement): () => void {
   const fallbackCanvas = sourceCanvas.cloneNode(false) as HTMLCanvasElement;
@@ -12,8 +40,10 @@ function startParticleFallback(sourceCanvas: HTMLCanvasElement): () => void {
   if (!context) return () => undefined;
 
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const scrollMotion = createScrollMotion();
   let animationFrame = 0;
   let pixelRatio = 1;
+  let compact = false;
   let rows = 0;
   let columns = 0;
   let visibilityNoise = new Float32Array();
@@ -30,11 +60,13 @@ function startParticleFallback(sourceCanvas: HTMLCanvasElement): () => void {
   const bucketCount = 6;
 
   const resize = () => {
-    pixelRatio = Math.min(window.devicePixelRatio || 1, 1);
+    compact = isCompactViewport();
+    pixelRatio = Math.min(window.devicePixelRatio || 1, compact ? MOBILE_OCEAN.maxPixelRatio : 1);
     fallbackCanvas.width = Math.max(1, Math.round(window.innerWidth * pixelRatio));
     fallbackCanvas.height = Math.max(1, Math.round(window.innerHeight * pixelRatio));
     rows = Math.min(72, Math.max(44, Math.round(window.innerHeight / 13)));
-    columns = Math.min(160, Math.max(96, Math.round(window.innerWidth / 12)));
+    const spacing = compact ? MOBILE_OCEAN.columnSpacing : 12;
+    columns = Math.min(160, Math.max(96, Math.round(sceneWidth(window.innerWidth, window.innerHeight, compact) / spacing)));
     visibilityNoise = new Float32Array(rows * columns);
 
     for (let index = 0; index < visibilityNoise.length; index++) {
@@ -76,15 +108,23 @@ function startParticleFallback(sourceCanvas: HTMLCanvasElement): () => void {
       fallbackCanvas.dataset.animationState = "running";
     }
     fallbackCanvas.dataset.playbackSpeed = playbackSpeed.toFixed(3);
-    animationTime += deltaTime * 0.001 * playbackSpeed;
+    // Même réaction au défilement que le rendu WebGPU : la vitesse agite la houle et
+    // incline la vue, la position dans la page fait avancer sur l'eau.
+    const motion = scrollMotion.update(deltaTime * 0.001);
+    const agitation = Math.abs(motion.velocity);
+    animationTime += deltaTime * 0.001 * playbackSpeed * (1 + agitation * 1.6);
     const time = animationTime;
+    const travel = motion.progress * 0.9;
 
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     context.clearRect(0, 0, width, height);
     context.globalCompositeOperation = "lighter";
 
-    const horizon = height * 0.48;
+    const horizon = height * (0.48 - motion.velocity * 0.05);
     const centerX = width * 0.5;
+    const spanX = sceneWidth(width, height, compact);
+    const pointScale = compact ? MOBILE_OCEAN.pointScale : 1;
+    const amplitudeScale = compact ? MOBILE_OCEAN.amplitudeScale : 1;
     const neutralPaths = Array.from({ length: bucketCount }, () => new Path2D());
     const orangePaths = Array.from({ length: bucketCount }, () => new Path2D());
 
@@ -93,16 +133,17 @@ function startParticleFallback(sourceCanvas: HTMLCanvasElement): () => void {
       const depth = z ** 1.62;
       const widthScale = 0.68 + depth * 0.9;
       const yBase = horizon + depth * (height - horizon) * 1.12;
-      const pointSize = 3.2 + depth * 3.8;
+      const pointSize = (3.2 + depth * 3.8) * pointScale;
       const middleLight = Math.exp(-(((z - 0.34) / 0.31) ** 2));
       const foregroundFade = 1 - Math.max(0, (z - 0.52) / 0.48) * 0.88;
 
       for (let column = 0; column < columns; column++) {
         const x = column / (columns - 1) * 2 - 1;
-        const phase1 = x * 4.2 + z * 7.0 - time * 0.24;
-        const phase2 = x * 9.7 - z * 4.1 + time * 0.17;
-        const phase3 = x * 18.2 + z * 12.3 - time * 0.46;
-        const phase4 = x * -6.3 + z * 19.1 + time * 0.31;
+        const zt = z - travel;
+        const phase1 = x * 4.2 + zt * 7.0 - time * 0.24;
+        const phase2 = x * 9.7 - zt * 4.1 + time * 0.17;
+        const phase3 = x * 18.2 + zt * 12.3 - time * 0.46;
+        const phase4 = x * -6.3 + zt * 19.1 + time * 0.31;
         const s1 = Math.sin(phase1);
         const s2 = Math.sin(phase2);
         const s3 = Math.sin(phase3);
@@ -122,10 +163,10 @@ function startParticleFallback(sourceCanvas: HTMLCanvasElement): () => void {
 
         const projectedX =
           centerX +
-          x * width * 0.8 * widthScale +
+          x * spanX * 0.8 * widthScale +
           Math.sin(z * 8.5 + time * 0.09) * depth * 12;
         const projectedY =
-          yBase - elevation * (28 + depth * 90);
+          yBase - elevation * (28 + depth * 90) * amplitudeScale * (1 + agitation * 0.45);
         const alpha = Math.min(
           0.82,
           (0.05 + middleLight * 0.4) *
@@ -136,7 +177,7 @@ function startParticleFallback(sourceCanvas: HTMLCanvasElement): () => void {
 
         if (alpha < 0.012) continue;
 
-        const orangeAccent = crest > 0.85 && noise > 0.93;
+        const orangeAccent = crest > 0.85 && noise > 0.93 - agitation * 0.12;
         const bucket = Math.min(bucketCount - 1, Math.floor(alpha / 0.82 * bucketCount));
         const path = orangeAccent ? orangePaths[bucket]! : neutralPaths[bucket]!;
         path.rect(projectedX, projectedY, pointSize, pointSize);
@@ -259,7 +300,27 @@ if (canvas) {
     dispose = startParticleFallback(canvas);
   };
 
-  start();
+  // Mode léger (page À propos) : le canvas reste vide et le CSS affiche une image
+  // fixe de l'océan à sa place. Une bascule en cours de visite arrête le rendu et
+  // remplace le canvas par un clone vierge, pour effacer la dernière image dessinée.
+  const liteMode = () => document.documentElement.classList.contains("visuals-lite");
+
+  if (liteMode()) {
+    stopped = true;
+    canvas.dataset.renderer = "image";
+  } else {
+    start();
+    document.addEventListener("visuals:lite", () => {
+      stopped = true;
+      dispose();
+      dispose = () => undefined;
+      const current = document.querySelector<HTMLCanvasElement>("#fft-ocean-background");
+      if (!current) return;
+      const blank = current.cloneNode(false) as HTMLCanvasElement;
+      blank.dataset.renderer = "image";
+      current.replaceWith(blank);
+    }, { once: true });
+  }
 
   // pagehide sert deux cas distincts : un départ définitif, où le GPU doit être
   // libéré, et une mise en bfcache, où la page sera restaurée telle quelle. Dans

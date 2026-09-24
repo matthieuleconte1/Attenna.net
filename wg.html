@@ -1,47 +1,87 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <!-- Ressources visuelles de la page d'installation WireGuard. -->
-    <link rel="stylesheet" href="CSS/style-wg.css">
-    <link rel="stylesheet" href="CSS/unified-pages.css">
+    <!-- Métadonnées, feuilles de style et polices communes aux pages secondaires. -->
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="CSS/button-refresh.css">
+    <link rel="stylesheet" href="CSS/unified-pages.css">
     <title>WG - Attenna.net</title>
     <link rel="icon" href="pictures/favicon.ico" sizes="any">
     <link rel="icon" type="image/png" sizes="32x32" href="pictures/favicon-32.png">
     <link rel="icon" type="image/png" sizes="192x192" href="pictures/favicon-192.png">
     <link rel="apple-touch-icon" href="pictures/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body id="top" class="site-page wg-page">
-<!-- En-tête minimal de la page WireGuard. -->
+<body class="site-page wg-page">
+<canvas id="fft-ocean-background" class="ocean-background" aria-hidden="true"></canvas>
+<!-- En-tête commun : accès au site, à WireGuard, au profil et au dépôt. -->
 <header>
     <div class="header-left">
         <a href="https://attenna.net">
-            <img src="pictures/icon.png" alt="icon" id="icon">
+            <img src="pictures/icon.png" alt="Attenna" id="icon">
         </a>
     </div>
     <div class="header-right">
+        <a href="wg.html" class="vpn-circle" aria-label="VPN" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path class="vpn-icon-plug vpn-icon-lower" d="M7 12l5 5l-1.5 1.5a3.536 3.536 0 1 1 -5 -5l1.5 -1.5z"></path>
+                <path class="vpn-icon-plug vpn-icon-upper" d="M17 12l-5 -5l1.5 -1.5a3.536 3.536 0 1 1 5 5l-1.5 1.5z"></path>
+                <path class="vpn-icon-plug vpn-icon-lower" d="M3 21l2.5 -2.5"></path>
+                <path class="vpn-icon-plug vpn-icon-upper" d="M18.5 5.5l2.5 -2.5"></path>
+                <path class="vpn-icon-plug vpn-icon-lower vpn-icon-leg" d="M10 11l-2 2"></path>
+                <path class="vpn-icon-plug vpn-icon-lower vpn-icon-leg" d="M13 14l-2 2"></path>
+            </svg>
+        </a>
+        <a href="HTML/Matthieu.html" aria-label="Mon profil">
+            <div class="circle">
+                <img src="pictures/Matthieu.gif" class="gif" alt=""/>
+                <img src="pictures/avatar.png" class="avatar" alt=""/>
+            </div>
+        </a>
         <a href="https://github.com/matthieuleconte1/SAE14-Site" target="_blank">
             <img src="pictures/github-white-icon.webp" alt="GitHub" id="github-logo">
         </a>
     </div>
 </header>
+
 <!-- Action principale : copier la commande, puis accéder à l'horloge démo. -->
-<main class="wg-center">
+<main class="page-main wg-layout">
+    <section class="page-hero">
+        <h1>WireGuard</h1>
+        <p class="page-subtitle">Copiez la commande dans un terminal.</p>
+    </section>
+
     <button type="button" class="center-pill" data-copy-command="curl -fsSL https://wg.attenna.net | sudo bash">
+        <span class="command-prompt" aria-hidden="true">$</span>
         <span class="command-text">curl -fsSL https://wg.attenna.net | sudo bash</span>
-        <span class="copy-icon" aria-hidden="true"></span>
+        <span class="copy-icon" aria-hidden="true">
+            <svg class="copy-icon-idle" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5"></rect><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"></path></svg>
+            <svg class="copy-icon-done" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>
+        </span>
     </button>
-    <a href="horloge.html" class="terminal-button">Horloge</a>
+    <span class="visually-hidden" id="copy-status" aria-live="polite"></span>
+
+    <div class="wg-actions">
+        <a href="horloge.html" class="service-button gray">
+            <span class="button-icon button-icon-in" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+            </span>
+            <span class="button-label">Horloge</span>
+            <span class="button-icon button-icon-out" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            </span>
+        </a>
+    </div>
 </main>
 <script>
     // Bouton qui porte la commande dans son attribut data, pour éviter de la dupliquer.
     const copyButton = document.querySelector(".center-pill");
+    const copyStatus = document.getElementById("copy-status");
+    let copiedTimer = 0;
 
     // Copie via l'API moderne, avec une solution de repli pour les contextes non sécurisés.
     async function copyText(text) {
@@ -61,13 +101,18 @@
         document.body.removeChild(textarea);
     }
 
-    // Déclenche la copie puis relance la classe d'animation de confirmation.
+    // Affiche la coche de confirmation, puis revient à l'icône de copie.
     copyButton.addEventListener("click", async () => {
         await copyText(copyButton.dataset.copyCommand);
-        copyButton.classList.remove("copied");
-        void copyButton.offsetWidth;
         copyButton.classList.add("copied");
+        copyStatus.textContent = "Commande copiée";
+        clearTimeout(copiedTimer);
+        copiedTimer = setTimeout(() => {
+            copyButton.classList.remove("copied");
+            copyStatus.textContent = "";
+        }, 1800);
     });
 </script>
+<script type="module" src="JS/fft-ocean.ts"></script>
 </body>
 </html>

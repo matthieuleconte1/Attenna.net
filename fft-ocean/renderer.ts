@@ -21,6 +21,7 @@ import bloomBlurWgsl from "./bloom-blur.wgsl?raw";
 import bloomBrightWgsl from "./bloom-bright.wgsl?raw";
 import bloomCompositeWgsl from "./bloom-composite.wgsl?raw";
 import { oceanCamera } from "./camera";
+import { createScrollMotion, type ScrollMotion } from "./scroll-motion";
 import ifftStageWgsl from "./ifft-stage.wgsl?raw";
 import initialSpectrumWgsl from "./initial-spectrum.wgsl?raw";
 import noiseWgsl from "./noise.wgsl?raw";
@@ -130,6 +131,7 @@ export function createRenderer({ canvas }: RendererOptions) {
     unsubscribeResize = output.onResize(scheduleResize);
 
     const time = clock(gpu);
+    const scrollMotion = createScrollMotion();
     let elapsedTime = 0;
     let previousTime = time.time;
     // hasFocus() est faux juste après une restauration depuis le bfcache, alors
@@ -189,8 +191,13 @@ export function createRenderer({ canvas }: RendererOptions) {
 
       if (disposed || playbackSpeed === 0 || !graph || !output) return;
       try {
-        elapsedTime += deltaTime * playbackSpeed;
-        setDynamics(graph, elapsedTime * OCEAN_TUNING.simulation.timeScale);
+        // Défiler accélère la houle ; elle retrouve son rythme quand la page s'arrête.
+        const motion = scrollMotion.update(deltaTime);
+        const agitation = Math.abs(motion.velocity);
+        elapsedTime +=
+          deltaTime * playbackSpeed * (1 + agitation * OCEAN_TUNING.scroll.waveBoost);
+        setDynamics(graph, elapsedTime * OCEAN_TUNING.simulation.timeScale, agitation);
+        setScrollView(graph.particles, output, motion);
         renderGraph(currentFrame, graph, output);
       } catch (error) {
         fail(error);
@@ -487,9 +494,35 @@ async function prewarm(graph: OceanGraph, output: Output): Promise<void> {
   if (failure) throw failure.reason;
 }
 
-function setDynamics(graph: OceanGraph, timeSeconds: number): void {
+function setDynamics(
+  graph: OceanGraph,
+  timeSeconds: number,
+  agitation = 0
+): void {
+  const { choppiness } = OCEAN_TUNING.simulation;
   graph.effects.evolveSpectrum.set({
-    u: { time: timeSeconds * OCEAN_TUNING.simulation.spectrumTimeScale },
+    u: {
+      time: timeSeconds * OCEAN_TUNING.simulation.spectrumTimeScale,
+      choppiness: choppiness * (1 + agitation * OCEAN_TUNING.scroll.choppinessBoost),
+    },
+  });
+}
+
+/** Caméra suivant le défilement, et crêtes orange avivées par sa vitesse. */
+function setScrollView(
+  particles: Draw,
+  output: Output,
+  motion: ScrollMotion
+): void {
+  const camera = oceanCamera(output.size, motion);
+  const glow = 1 + Math.abs(motion.velocity) * OCEAN_TUNING.scroll.neonBoost;
+  const [red, green, blue, alpha] = OCEAN_TUNING.particles.neonColor;
+  particles.set({
+    u: {
+      view: camera.view,
+      projection: camera.projection,
+      neonColor: [red * glow, green * glow, blue * glow, alpha],
+    },
   });
 }
 

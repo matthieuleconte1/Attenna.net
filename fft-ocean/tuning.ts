@@ -34,6 +34,16 @@ export const OCEAN_TUNING = {
     near: 0.1,
     far: 2000,
   },
+  // Réaction au défilement : trajet de caméra sur toute la page et agitation liée à la vitesse.
+  scroll: {
+    travel: 45,
+    drift: 16,
+    lift: 9,
+    tilt: 7,
+    waveBoost: 1.6,
+    choppinessBoost: 0.55,
+    neonBoost: 1.8,
+  },
   bloom: {
     threshold: 0.3,
     smoothWidth: 0.01,
