@@ -240,92 +240,6 @@ button:active {
     justify-content: center;
 }
 
-.pve-label {
-    position: relative;
-    z-index: 1;
-    transform: translateX(0);
-    transition: transform 0.24s ease 0s;
-}
-
-.pve-dropdown:hover .pve-label,
-.pve-dropdown:focus-within .pve-label {
-    transform: translateX(-14px);
-    transition-delay: 1s;
-}
-
-.pve-caret {
-    position: absolute;
-    top: 50%;
-    right: 42px;
-    z-index: 1;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    opacity: 0;
-    transform: translateY(-50%) rotate(180deg);
-    transition: opacity 0.2s ease 0s, transform 0.24s ease 0s;
-}
-
-.pve-dropdown:hover .pve-caret,
-.pve-dropdown:focus-within .pve-caret {
-    opacity: 1;
-    transform: translateY(-50%) rotate(0deg);
-    transition-delay: 1s, 1s;
-}
-
-.pve-mini {
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 50%;
-    z-index: 10;
-    align-items: center;
-    justify-content: center;
-    width: 200px;
-    height: 100px;
-    border: 1px solid rgba(255, 184, 38, 0.76);
-    border-radius: 28px;
-    background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 38%),
-        rgba(23, 23, 23, 0.34);
-    color: #ffb826;
-    font-family: "Momo Trust Display", sans-serif;
-    font-size: clamp(24px, 3.5vw, 30px);
-    line-height: 1;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        0 14px 32px rgba(0, 0, 0, 0.34),
-        0 0 18px rgba(244, 111, 3, 0.18);
-    opacity: 0;
-    pointer-events: none;
-    transform: translate(-50%, -8px) scale(0.94);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    transition: opacity 0.24s ease 0s, transform 0.24s ease 0s, border-color 0.24s ease, box-shadow 0.24s ease;
-}
-
-.pve-dropdown:hover .pve-mini,
-.pve-dropdown:focus-within .pve-mini {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translate(-50%, 0) scale(1);
-    transition-delay: 1s, 1s, 0s, 0s;
-}
-
-.pve-mini:hover,
-.pve-mini:focus-visible {
-    border-color: rgba(255, 214, 133, 0.95);
-    color: #ffd685;
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.28),
-        0 18px 38px rgba(0, 0, 0, 0.38),
-        0 0 30px rgba(244, 111, 3, 0.38);
-}
-
 /* Gray button */
 .gray {
     --button-bg: linear-gradient(135deg, rgba(94, 94, 94, 0.8), rgba(23, 23, 23, 0.84));
@@ -871,29 +785,6 @@ body::after {
         padding: 12px 18px;
         font-size: 22px;
 
-    }
-
-    .pve-mini {
-        position: static;
-        margin-top: 0;
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateY(0) scale(1);
-    }
-
-    .pve-label {
-        transform: translateX(0);
-        transition-delay: 0s;
-    }
-
-    .pve-caret {
-        opacity: 0;
-        transition-delay: 0s;
-    }
-
-    .pve-dropdown:hover .pve-mini,
-    .pve-dropdown:focus-within .pve-mini {
-        transform: translateY(0) scale(1);
     }
 
     .scroll-hint,
